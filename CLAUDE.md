@@ -8,6 +8,8 @@ Check docs/WORKLOG.md for the current task list and recent session notes before 
 A public repo of installable Claude Code skills. Each skill is a folder with a `SKILL.md`, no build step, no dependency on any private repo. Rewritten from private originals in `~/my-ai-agent` to strip personal/machine-specific setup (names, canary tokens, Cursor linkage scripts, `~/my-ai-agent` paths).
 
 ## Key decisions
+- [2026-07-03] No separate Cursor-global-rules template was built for drift-check. Content would duplicate example-global-CLAUDE.md, and Cursor's exact User Rules storage mechanism isn't confirmed, so the SKILL.md points users to adapt the existing example instead.
+- [2026-07-03] SKILL.md auto-invocation is Claude Code specific; Cursor doesn't scan .claude/skills/. README now separates what Cursor inherits for free (context-router.md, CLAUDE.md, WORKLOG.md) from what requires manual conversion to a .cursor/rules/*.mdc project rule.
 - [2026-07-03] drift-check scoped to the global context file only, not project-level CLAUDE.md/AGENTS.md, because global files are the long, dense ones where depth-based drift actually happens; project files are short and re-read naturally each session.
 - [2026-07-03] drift-check never auto-creates a global context file if one doesn't exist, that's a bigger machine-level decision left to the user.
 - [2026-07-03] project-init only creates `CLAUDE.md`, never `AGENTS.md`, but `handoff` still recognizes an existing `AGENTS.md` from another tool.
