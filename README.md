@@ -2,11 +2,22 @@
 
 Public, machine-agnostic Claude Code skills anyone can install, no dependency on any private repo or personal setup.
 
-A "skill" here is just a folder with a `SKILL.md` file inside it, plain markdown instructions that tell your AI tool (Claude Code, Cursor, etc.) how to run a specific workflow. No code, no build step.
+A "skill" here is just a folder with a `SKILL.md` file inside it, plain markdown instructions that tell Claude Code how to run a specific workflow. No code, no build step. `SKILL.md` with trigger-phrase auto-invocation is a Claude Code mechanism specifically, Cursor doesn't scan `.claude/skills/` or fire skills off trigger phrases.
 
-## How to install
+That said, `project-init` and `handoff` also write and maintain files Cursor reads natively (`.cursor/rules/context-router.md`, `CLAUDE.md`, `docs/WORKLOG.md`), so once either has run once (in Claude Code), Cursor picks up the same project conventions and worklog automatically. `drift-check` has no Cursor-side output, it's Claude Code only.
+
+## How to install (Claude Code)
 
 Copy a skill's folder into your project's `.claude/skills/` directory (or `~/.claude/skills/` for a skill you want available everywhere), keeping the folder name and the `SKILL.md` inside it.
+
+## Using these in Cursor
+
+Cursor won't auto-discover a `SKILL.md`, but you can get the same workflow by turning it into a Cursor project rule:
+
+1. Copy a skill's `SKILL.md` content.
+2. Save it as `.cursor/rules/<skill-name>.mdc` in your project.
+3. Keep the existing `description:` line in the frontmatter (that's what lets Cursor's agent decide when it's relevant), and add `alwaysApply: false` so it only loads when needed rather than on every message.
+4. Invoke it by typing `@<skill-name>` in a Cursor chat, or let the agent attach it automatically when your request matches the description.
 
 ## Skills
 
