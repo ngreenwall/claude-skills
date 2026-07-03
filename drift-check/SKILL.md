@@ -30,6 +30,8 @@ Skip setup if tokens already exist in the file from a previous run.
 
 If you don't have a global context file yet and want one, create it yourself, this skill won't create it for you, that's a bigger, machine-level decision than an audit tool should make on your behalf.
 
+**Using this in Cursor instead of Claude Code:** the canary/labeling mechanics are the same regardless of tool, only the file changes. Cursor's equivalent of a global context file is its User Rules (configured in Cursor Settings), place the same three labeled canaries there instead of `~/.claude/CLAUDE.md`. You can reuse `drift-check/example-global-CLAUDE.md`'s content as a starting point, just adapt it to whatever format Cursor's rules expect.
+
 ## PROTOCOL
 
 Produce a short scorecard with all three checks below. Keep it tight.

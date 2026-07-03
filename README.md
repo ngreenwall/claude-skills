@@ -46,7 +46,7 @@ This is scoped to the global file on purpose, it's usually the long, dense one t
 
 **One-time setup required before first use.** This skill can't run until your global context file is prepared:
 
-1. **Find or create your global context file.** In Claude Code, that's `~/.claude/CLAUDE.md`. It's a plain markdown file, edit it directly with any editor. If you don't have one and want one, create it yourself, this skill won't create it for you.
+1. **Find or create your global context file.** In Claude Code, that's `~/.claude/CLAUDE.md`, a plain markdown file, edit it directly with any editor. In Cursor, it's your User Rules (in Cursor Settings) instead. If you don't have one and want one, create it yourself, this skill won't create it for you.
 2. **Generate three canary tokens.** Pick three short, random, unguessable strings, e.g. `sunfish-quartz-14`, `pebble-orchard-08`, `willow-basalt-71`. Use a different one for each position, top, middle, bottom, so a missing token tells you exactly where the drop happened.
 3. **Place and label them in your global context file.** Label each clearly: `Canary (top):`, `Mid-file canary:`, `Canary (bottom):`. Put the top one next to whatever rule you consider most important. Tell your context file not to output these tokens during normal work, only when a drift check runs.
 4. **Pick your own "always-on" rules to check every time.** A common one is a response-format prefix, if you want your assistant to start every reply with a tag (e.g. "Agent:", "Bot:", your own name, or nothing at all), name that convention in your context file and list it as one of the core rules in `drift-check/SKILL.md`'s Check 2 section. Skip this if you don't use a prefix convention.
