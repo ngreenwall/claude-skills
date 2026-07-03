@@ -24,13 +24,15 @@ This skill needs three canary tokens embedded in your global context file:
 
 1. Generate three short, unique, unguessable strings (e.g. `anchor-word-word-NN` style, or any random phrase you won't naturally type in conversation). Use a different token for each position, don't reuse one token in all three spots.
 2. Place one token near the **top** of the file (alongside your most important always-on rule, so recalling the rule and the token happen together), one in the **middle**, and one at the **bottom**. Label each clearly, e.g. `Mid-file canary: <token>` and `Canary (bottom): <token>`, and instruct the file's reader not to output the token during normal work, only when running this check.
-3. Note the file path so Check 1 knows what to re-read.
+3. Note the file path so Check 1 knows what to re-read. Only needed if your global context file lives somewhere other than the standard location (e.g. `~/.claude/CLAUDE.md`).
 
 Skip setup if tokens already exist in the file from a previous run.
 
+If you use an always-on convention worth checking every time (e.g. a response-format prefix), name it in your context file, then replace the placeholder examples in this file's own Check 2 "Core rules" list (below) with your actual rules, so scorecards stay comparable across runs.
+
 If you don't have a global context file yet and want one, create it yourself, this skill won't create it for you, that's a bigger, machine-level decision than an audit tool should make on your behalf.
 
-**Using this in Cursor instead of Claude Code:** the canary/labeling mechanics are the same regardless of tool, only the file changes. Cursor's equivalent of a global context file is its User Rules (configured in Cursor Settings), place the same three labeled canaries there instead of `~/.claude/CLAUDE.md`. You can reuse `drift-check/example-global-CLAUDE.md`'s content as a starting point, just adapt it to whatever format Cursor's rules expect.
+**Using this in Cursor instead of Claude Code:** the canary/labeling mechanics are the same regardless of tool, only the file changes. Cursor's equivalent of a global context file is its User Rules (configured in Cursor Settings), place the same three labeled canaries there instead of `~/.claude/CLAUDE.md`. You can reuse `drift-check/example-global-CLAUDE.md`'s content as a starting point, just adapt it to whatever format Cursor's rules expect. Note: step 3 (noting the file path) doesn't apply here, User Rules aren't a plain file with a path, so Check 1's re-read may need to happen by you pasting the current contents back in rather than the skill reading it directly.
 
 ## PROTOCOL
 
