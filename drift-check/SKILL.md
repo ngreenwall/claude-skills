@@ -1,27 +1,34 @@
 ---
 name: drift-check
 description: >-
-  Manual context-drift audit. Confirms your global or project context file is
-  still loaded and being followed, and flags where context dropped. Run ONLY
-  when the user explicitly types /drift-check or says "drift check," "context
-  check," "are you still following my context," or "check for drift." Do NOT
-  auto-trigger and do NOT run during normal task work.
+  Manual context-drift audit. Confirms your global context file (the standing
+  instructions loaded on every session) is still loaded and being followed,
+  and flags where context dropped. Run ONLY when the user explicitly types
+  /drift-check or says "drift check," "context check," "are you still
+  following my context," or "check for drift." Do NOT auto-trigger and do NOT
+  run during normal task work.
 ---
 # SKILL: Drift Check
 
-A deliberate, manual audit that confirms your context file (global instructions, `CLAUDE.md`, `AGENTS.md`, or similar) is loaded and actually shaping behavior, and pinpoints where context dropped (top, middle, or bottom of the file). Long sessions and context compaction silently drop rules; this catches it.
+A deliberate, manual audit that confirms your **global** context file (the standing instructions your AI tool loads on every session, e.g. `~/.claude/CLAUDE.md`) is loaded and actually shaping behavior, and pinpoints where context dropped (top, middle, or bottom of the file). Long sessions and context compaction silently drop rules; this catches it.
+
+This skill targets the global file specifically because that's usually the long, dense one, personal preferences, workflow habits, formatting rules, accumulated over time. That length is exactly what makes mid-file and end-of-file drift possible. A project-level `CLAUDE.md` is typically short (file-structure or workflow reminders) and gets re-read naturally each session, it doesn't carry the same depth-loss risk, so it's out of scope for this skill by default.
+
+If you ever notice yourself violating a project-specific rule mid-session (e.g. editing a file you were told not to touch), that's a signal you might want a lightweight check for that project file too, but don't set one up preemptively, only add it once you've actually seen it happen.
 
 Do NOT pre-read the context file before running the checks. The whole point is to test what is actually loaded in the current context window. Reproduce from memory, then you may verify against the file in step 1.
 
 ## Setup (one-time, before first use)
 
-This skill needs three canary tokens embedded in the context file you want to audit:
+This skill needs three canary tokens embedded in your global context file:
 
 1. Generate three short, unique, unguessable strings (e.g. `anchor-word-word-NN` style, or any random phrase you won't naturally type in conversation). Use a different token for each position, don't reuse one token in all three spots.
 2. Place one token near the **top** of the file (alongside your most important always-on rule, so recalling the rule and the token happen together), one in the **middle**, and one at the **bottom**. Label each clearly, e.g. `Mid-file canary: <token>` and `Canary (bottom): <token>`, and instruct the file's reader not to output the token during normal work, only when running this check.
-3. Note the file path (or paths, if you maintain both a global file and a project-level `CLAUDE.md`) so Check 1 knows what to re-read.
+3. Note the file path so Check 1 knows what to re-read.
 
 Skip setup if tokens already exist in the file from a previous run.
+
+If you don't have a global context file yet and want one, create it yourself, this skill won't create it for you, that's a bigger, machine-level decision than an audit tool should make on your behalf.
 
 ## PROTOCOL
 
@@ -85,7 +92,7 @@ Drift check:
 Overall: <on-track | drifting: which rules, which depth>
 ```
 
-If drift is found, end with the single highest-leverage fix (e.g. "re-read context file," "re-run after compaction," or name the specific rule to correct). No other wrap-up.
+If drift is found, end with the single highest-leverage fix, tagged with who acts on it: "(auto-applying from next reply)" for behavior fixes, or "(needs your OK to edit <file>)" for load/file fixes. No other wrap-up.
 
 ## Auto-remediation (on drift only)
 

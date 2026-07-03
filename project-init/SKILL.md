@@ -191,7 +191,7 @@ Not part of day-0 init. Apply later, during handoff or when the user asks:
 - Never delete existing project content to satisfy this skill; patch minimally.
 - Never rewrite a full `README.md` if only sections are missing.
 - Keep file paths in output explicit and copy-pasteable.
-- Do not create `AGENTS.md`, use `CLAUDE.md` as the single project context file for both tools.
+- This skill only creates `CLAUDE.md`, not `AGENTS.md`. If you already use `AGENTS.md` from another tool, `handoff` will still recognize and update it, project-init just doesn't create one itself.
 
 ## Tool-specific notes
 

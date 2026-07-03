@@ -3,10 +3,11 @@ name: handoff
 description: >-
   End-of-session workflow to leave durable project context for the next chat.
   Use whenever the user says "handoff," "wrap up," "end of session," "before we
-  end," "close out this session," "let's wrap," "we're done," "wrap this up," or
-  "closing out." Do NOT use for new-project bootstrap or missing baseline
-  scaffolding; use project-init for that. Do NOT use for general project status
-  questions or mid-session context checks.
+  end," "close out this session," "let's wrap," "we're done," "wrap this up,"
+  "closing out," "starting a new session," or "before I start fresh." Do NOT
+  use for new-project bootstrap or missing baseline scaffolding; use
+  project-init for that. Do NOT use for general project status questions or
+  mid-session context checks.
 ---
 # SKILL: Handoff
 
