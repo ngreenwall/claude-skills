@@ -92,7 +92,14 @@ Drift check:
 Overall: <on-track | drifting: which rules, which depth>
 ```
 
-If drift is found, end with the single highest-leverage fix, tagged with who acts on it: "(auto-applying from next reply)" for behavior fixes, or "(needs your OK to edit <file>)" for load/file fixes. No other wrap-up.
+If drift is found, end with one plain-language sentence naming who acts and when, no shorthand tags, no jargon:
+- Behavior fix (Check 2): say "I'll self-correct this starting with my next reply, you don't need to do anything."
+- Load/file fix (Check 1): say "This needs your OK before I edit `<file>` to fix it."
+- Compaction fallout: say "Re-run this check whenever it's convenient, no rush."
+
+If this check is confirming a fix from an earlier drift-check in the same session, say so in full sentences, e.g. "Last check flagged <rule>; every reply since then followed it, so that's resolved, nothing else needed from you." Don't reuse a tag or shorthand from the earlier check's output out of context, it won't carry meaning on its own.
+
+No other wrap-up.
 
 ## Auto-remediation (on drift only)
 
