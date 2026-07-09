@@ -2,7 +2,17 @@
 
 > Public skills for Claude Code, portable to Cursor and Claude.ai/Cowork, no dependency on any private repo or personal setup.
 
-A "skill" is a folder with a `SKILL.md` file inside it (YAML frontmatter with `name` and `description`, then markdown instructions) that tells Claude how to run a specific workflow. Skills can optionally bundle scripts or other resources, but the five in this repo are pure markdown, no code, no build step.  
+A "skill" is a folder with a `SKILL.md` file inside it (YAML frontmatter with `name` and `description`, then markdown instructions) that tells Claude how to run a specific workflow. Skills can optionally bundle scripts or other resources:
+
+```
+my-skill/
+├── SKILL.md
+├── scripts/       # executable code
+├── references/    # documentation
+├── assets/        # templates, resources
+```
+
+None of the five skills here use `scripts/` or `references/`, no code, no build step. `handoff` and `project-init` each ship an `assets/` folder with starter templates (worklog, CLAUDE.md, Cursor context-router content) that `SKILL.md` loads on demand instead of inlining.
 
 
 ## Contents
