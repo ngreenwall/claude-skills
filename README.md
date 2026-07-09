@@ -2,7 +2,7 @@
 
 > Public skills for Claude Code, portable to Cursor and Claude.ai/Cowork, no dependency on any private repo or personal setup.
 
-A "skill" is a folder with a `SKILL.md` file inside it (YAML frontmatter with `name` and `description`, then markdown instructions) that tells Claude how to run a specific workflow. Skills can optionally bundle scripts or other resources, but the three in this repo are pure markdown, no code, no build step.  
+A "skill" is a folder with a `SKILL.md` file inside it (YAML frontmatter with `name` and `description`, then markdown instructions) that tells Claude how to run a specific workflow. Skills can optionally bundle scripts or other resources, but the four in this repo are pure markdown, no code, no build step.  
 
 
 ## Contents
@@ -14,6 +14,7 @@ A "skill" is a folder with a `SKILL.md` file inside it (YAML frontmatter with `n
   - [project-init](#project-init)
   - [handoff](#handoff)
   - [drift-check](#drift-check) (Claude Code only)
+  - [qa-audit](#qa-audit) (Claude Code and Cowork)
 - [License](#license)
 
 
@@ -32,11 +33,13 @@ Cursor won't auto-discover a `SKILL.md`, but you can get the same workflow by tu
 
 Note: `drift-check` isn't built for Cursor yet, only the Claude Code version ships here, though the mechanism could work since Cursor's User Rules auto-load every session too.
 
+Note: `qa-audit` relies on spawning a separate subagent (an `Agent`-tool call) per file being audited, that's a Claude Code mechanism a Cursor project rule can't reproduce. Converting it would collapse to a single self-audit pass with no parallelization, not the same workflow.
+
 ## Using these in Chat or Cowork
 
 **Claude.ai Chat** can't do any of this: no persistent access to a project folder, only files you manually attach to one conversation.
 
-**Cowork** has folder access, so `project-init` and `handoff` could work there. `drift-check` can't: it needs a global `CLAUDE.md` to auto-load every session, and Cowork doesn't do that.
+**Cowork** has folder access and subagents, so `project-init`, `handoff`, and `qa-audit` could all work there. `drift-check` can't: it needs a global `CLAUDE.md` to auto-load every session, and Cowork doesn't do that.
 
 To install a skill: Customize > Skills > "+" > "+ Create skill" > "Upload a skill" (zip the folder first).
 
@@ -81,6 +84,16 @@ Scoped to the global file on purpose: it's usually the long, dense one that accu
 3. **Place and label them in your global context file.** Label each clearly: `Canary (top):`, `Mid-file canary:`, `Canary (bottom):`. Put the top one next to whatever rule you consider most important. Tell your context file not to output these tokens during normal work, only when a drift check runs.
 4. **Pick your own "always-on" rules to check every time.** A common one is a response-format prefix, if you want your assistant to start every reply with a tag (e.g. "Agent:", "Bot:", your own name, or nothing at all), name that convention in your context file and list it as one of the core rules in `drift-check/SKILL.md`'s Check 2 section. Skip this if you don't use a prefix convention.
 5. **Note the file path** so the skill knows what to re-read when checking. Only needed if your global context file lives somewhere other than the standard location (e.g. `~/.claude/CLAUDE.md`).
+
+
+### [qa-audit](qa-audit/SKILL.md) (Claude Code and Cowork)
+
+> Static-analysis QA pass over instruction/config prose, not code.
+
+Spawns one Opus subagent per file (`SKILL.md`, `CLAUDE.md`, your global context file, `README.md`) to check for internal contradictions, dead or unreachable logic, unstated dependencies, style violations, and cross-file consistency. It reads and reasons about the file, it never runs the skill or file against real prompts. Proposes fixes and waits for confirmation before editing anything.
+
+- **Use it:** when you want a second, skeptical pass on instruction/config prose you wrote, e.g. "QA this skill" or "audit CLAUDE.md."
+- **Don't use it:** to check whether global context actually loaded in a live session (that's `drift-check`), to grade a skill's real-prompt outputs (that's skill-creator's eval feature), or on code diffs (use `/code-review`).
 
 
 ## License

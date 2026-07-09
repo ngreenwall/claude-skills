@@ -13,7 +13,7 @@ description: >-
 
 Leave durable project context for the next chat. Do not paste a full conversation recap or duplicate what already lives in project context files (CLAUDE.md, AGENTS.md, README.md, etc.).
 
-In **Recent session notes**, write **Shipped** as facts the next agent needs (code behavior, screens, paths, APIs), not narration about editing documentation or session housekeeping.
+In each **Session notes** entry, write **Shipped** as facts the next agent needs (code behavior, screens, paths, APIs), not narration about editing documentation or session housekeeping.
 
 ## PROTOCOL (run in this exact order)
 
@@ -59,7 +59,7 @@ If an existing worklog is missing the **Now / Next** section (older layout), add
 Open `$WORKLOG_PATH` → the session notes section. Read the newest 1-2 dated entries for dedup context.
 
 ### 4. Archive if needed
-If the session list already has 10 entries, archive just enough of the oldest entries to `docs/archive/worklog-YYYY-MM.md` to keep the list at or under 10 after adding the new one, typically just the single oldest entry. Do this before writing so the list never exceeds 10.
+If adding the new entry would push the session list past 10 entries, archive just enough of the oldest entries to `docs/archive/worklog-YYYY-MM.md` to keep the list at or under 10 after adding the new one, typically just the single oldest entry. Do this before writing so the list never exceeds 10.
 
 ### 5. Add or update one session entry
 Get today's real date before writing, run `date +%F` (or otherwise confirm the actual date). Do not guess or reuse a date from an older entry, some tools do not receive the current date automatically.
@@ -135,10 +135,10 @@ Also run a directory listing of the project root and compare against any existin
 If a section is missing or clearly stale, add or update it. If the README is accurate and complete, say "README is up to date" and move on.
 
 ### 9. Update other project docs
-First, check whether the project's CLAUDE.md (or AGENTS.md if no CLAUDE.md exists) already contains a line telling the agent to check WORKLOG.md at session start. If not, add this line to the appropriate file:
+First, check whether the project's CLAUDE.md (or AGENTS.md if no CLAUDE.md exists) already contains a line telling the agent to check WORKLOG.md at session start. If neither file exists, handoff assumes project-init already ran, but a lone missing CLAUDE.md is the one gap Step 1 lets through, so create `CLAUDE.md` with the line below rather than leaving this step undefined. If not, add this line to the appropriate file:
 
 ```
-Check $WORKLOG_PATH for the current task list and recent session notes before starting work.
+Check docs/WORKLOG.md for the current task list and recent session notes before starting work.
 ```
 
 Then verify a Cursor context router rule exists at `.cursor/rules/context-router.md`. If it is missing or stale, create or replace it with this canonical content:
@@ -185,7 +185,7 @@ Handoff checklist:
 - [x] README health check (updated|already up to date)
 - [x] Context routing docs (`CLAUDE.md`/`AGENTS.md` and `.cursor/rules/context-router.md`) (updated|already good)
 - [x] Noise check complete
-- [x] Committed and pushed (yes|no changes|skipped-no-terminal)
+- [x] Committed and pushed (yes|no changes|committed-not-pushed-no-remote|skipped-no-git|branch+PR|skipped-no-terminal)
 
 Manual follow-up:
 - <only include items that still need user action>

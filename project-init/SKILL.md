@@ -3,9 +3,9 @@ name: project-init
 description: >-
   One-time project bootstrap workflow for new repos. Use whenever the user says
   "initialize project," "set up this repo for Cursor and Claude," "new Cursor
-  project," "set up Cursor," "bootstrap docs/context," "new project setup," or
-  "prepare handoff files." Prefer this before first handoff in a repo. Do NOT
-  use for end-of-session updates in active projects; use handoff for that.
+  project," "set up Cursor," "bootstrap docs/context," or "new project setup."
+  Prefer this before first handoff in a repo. Do NOT use for end-of-session
+  updates in active projects; use handoff for that.
 ---
 # SKILL: Project Init
 
@@ -13,7 +13,7 @@ Initialize a project so future sessions and handoffs work consistently in both C
 
 ## MISSION
 Create the minimum durable scaffolding a project needs on day 0:
-- Git repo initialized with a `.gitignore`, and `LICENSE` when the project is meant to be shared
+- Git repo initialized with a `.gitignore`, and an MIT `LICENSE` whenever the project uses git
 - `CLAUDE.md` for project-facing AI guidance, including a short "What this is" and "Key decisions" section
 - `docs/WORKLOG.md` with the task checklist (Now / Next) up top and rolling session notes below
 - `README.md` baseline sections so agents and humans can pick up the repo quickly
@@ -34,7 +34,7 @@ Do not infer the answer from file types or folder contents, only the user knows 
 
 **Simple project:**
 1. Ask one setup question: "Will this live on git?"
-   - **Yes:** run `git init` if not already a repo, create a minimal `.gitignore` (`.DS_Store`, `.env`, plus stack-specific entries if detected), and create an MIT `LICENSE`, all automatically, no further questions. Use a different license only if the user names one. Do NOT ask where it will be pushed or create a remote; the completion report covers connecting to GitHub later. After all files are created, make an initial commit (`Initial scaffold`) so the folder is push-ready.
+   - **Yes:** run `git init` if not already a repo, create a minimal `.gitignore` (`.DS_Store`, `.env`, `CLAUDE.local.md`, plus stack-specific entries if detected), and create an MIT `LICENSE`, all automatically, no further questions. Use a different license only if the user names one. Do NOT ask where it will be pushed or create a remote; the completion report covers connecting to GitHub later. After all files are created, make an initial commit (`Initial scaffold`) so the folder is push-ready.
    - **No:** skip git, `.gitignore`, and `LICENSE` entirely.
 2. Create or patch `README.md` with just: What this is, How to install/use it, and any key configuration. Skip "How to run it" / "How to test or preview" if they don't apply.
 3. Create a minimal `CLAUDE.md` so return sessions start oriented (it's the file AI tools auto-load):
@@ -154,7 +154,7 @@ Manual follow-up:
 - <only include items that still need user action>
 ```
 
-If git was initialized (either scope) and no remote exists, always append this to Manual follow-up. Substitute the real values before printing (folder name from the project root, username via `gh api user -q .login`), the command must be copy-pasteable exactly as shown, no `<placeholders>`:
+If git was initialized (either scope) and no remote exists, always append this to Manual follow-up. Substitute the real values before printing (folder name from the project root, username via `gh api user -q .login`), the command must be copy-pasteable exactly as shown, no `<placeholders>`. If `gh` isn't installed or isn't authenticated, that lookup fails, in that case print the block with `ACTUAL-USERNAME` left as a literal placeholder and add a one-line note that the user needs to fill in their own GitHub username:
 
 ```markdown
 - This folder is committed and ready to push whenever you want it on GitHub:

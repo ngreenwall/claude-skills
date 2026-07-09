@@ -10,7 +10,7 @@ description: >-
 ---
 # SKILL: Drift Check
 
-A deliberate, manual audit that confirms your **global** context file (the standing instructions your AI tool loads on every session, e.g. `~/.claude/CLAUDE.md`) is loaded and actually shaping behavior, and pinpoints where context dropped (top, middle, or bottom of the file). Long sessions and context compaction silently drop rules; this catches it.
+A deliberate, manual audit that confirms your **global** context file (the standing instructions Claude Code loads on every session, `~/.claude/CLAUDE.md`) is loaded and actually shaping behavior, and pinpoints where context dropped (top, middle, or bottom of the file). Long sessions and context compaction silently drop rules; this catches it. This skill is Claude Code only, it depends on that global file auto-loading every session, a mechanism other tools don't replicate the same way.
 
 This skill targets the global file specifically because that's usually the long, dense one, personal preferences, workflow habits, formatting rules, accumulated over time. That length is exactly what makes mid-file and end-of-file drift possible. A project-level `CLAUDE.md` is typically short (file-structure or workflow reminders) and gets re-read naturally each session, it doesn't carry the same depth-loss risk, so it's out of scope for this skill by default.
 
@@ -42,7 +42,7 @@ Produce a short scorecard with all three checks below. Keep it tight.
 
 Reproduce the three depth canaries from the context file **from memory**, then confirm each:
 
-- **Top:** the token near your top-level always-on rule.
+- **Top:** the token labeled `Canary (top):`, placed near your top-level always-on rule.
 - **Mid-file:** the token labeled as the mid-file canary.
 - **Bottom:** the token labeled as the bottom canary.
 
@@ -120,9 +120,9 @@ No other wrap-up.
 
 Remediation depends on which check failed. They fail differently: a load failure is fixable now by re-reading; a behavior failure lives in past replies and can only be corrected going forward.
 
-**Check 1 ❌ (load/depth):** attempt one self-heal pass before stopping:
-1. **Re-read the context file** (the path noted during setup). This is a read, not an edit, so do it without asking.
-2. **Re-run all three checks once** and print a second, shorter scorecard.
+**Check 1 ❌ (load/depth):** attempt one self-heal pass before stopping. Check 1 already re-read the file to confirm the mismatch, so this isn't a second independent read, it's using that freshly-loaded content:
+1. **Re-run all three checks once**, now that the file is freshly loaded from Check 1's confirmation read, and print a second, shorter scorecard.
+2. If for any reason the file wasn't re-read yet (e.g. this remediation runs standalone), read it now (the path noted during setup). This is a read, not an edit, so do it without asking.
 3. **Report the result:**
    - Resolved → say so in one line.
    - Still ❌ → state which check still fails and give the manual fix.
