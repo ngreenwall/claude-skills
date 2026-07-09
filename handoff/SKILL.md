@@ -19,9 +19,11 @@ In **Recent session notes**, write **Shipped** as facts the next agent needs (co
 
 ### 0. Early exit for no-op sessions
 
-If a terminal is available and the project is a git repo (`.git` exists), run `git status --porcelain`. An empty result, with no files created or edited this session (including in prior `handoff` runs earlier in the same session), means skip straight to Step 13 with a lightweight report: state that nothing changed this session, and mark every checklist line as no changes/already up to date. Otherwise continue from Step 1.
+Judge by session content first: did this session create or edit any files, or make any commits, including ones made mid-conversation outside this flow, and in prior `handoff`/`update-context` runs earlier in the same session? If yes, there's work to log, continue from Step 1 regardless of what git status shows.
 
-If no terminal is available, or the project isn't a git repo, `git status` can't answer this, judge by session content alone instead: no files created or edited this session means the same early exit applies.
+Only reach for `git status --porcelain` (when a terminal is available and the project is a git repo) as a confirmation check once session content already points to nothing having happened, never as the primary signal. A clean working tree does not by itself mean nothing changed: earlier work may have already been committed and pushed outside the handoff flow, and that's real shipped work that still needs logging, not a no-op. Skip straight to Step 13 with a lightweight report only when session content indicates nothing happened (git status agreeing is just confirmation): state that nothing changed this session, and mark every checklist line as no changes/already up to date.
+
+If no terminal is available, or the project isn't a git repo, git status can't help at all, judge by session content alone.
 
 ### 1. Detect bootstrap gaps and route to project-init when needed
 Check whether baseline scaffolding is missing:
