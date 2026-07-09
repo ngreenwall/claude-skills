@@ -71,7 +71,7 @@ If the target carries YAML frontmatter (any `SKILL.md`, or a global/rule source 
 
 Merge results across all target files into one list, ranked by severity (likelihood of causing real bad behavior vs. just reading oddly). Keep the merged report compact, one line of context plus the proposed fix per finding, don't restate each subagent's reasoning. End with a summary count by severity.
 
-On a full-library run (4+ files), suggest compacting the conversation here before Step 5, the raw agent transcripts are no longer needed once findings are compiled.
+On a full-library run (4+ files), run `/compact` here before Step 5, the raw agent transcripts are no longer needed once findings are compiled.
 
 ### Step 5: Propose fixes, wait for confirmation
 

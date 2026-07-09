@@ -36,22 +36,7 @@ If two or more of the files above are missing, stop this workflow and recommend 
 ### 2. Locate or create WORKLOG.md
 Always use `docs/WORKLOG.md`. Save this path as `$WORKLOG_PATH`, every later step uses it.
 
-If `docs/WORKLOG.md` does not exist, create it (creating `docs/` if needed) with this starter template:
-
-```markdown
-# Worklog
-
-## Now / Next
-<!-- Checklist. "Now" items first (1-3 max), then queued items. -->
-- [ ]
-
-### Ideas
-<!-- Unscoped, someday. -->
-
-## Session notes
-<!-- Newest entry at top. Format: YYYY-MM-DD | Shipped: ... | Next: ... | Blockers: ... -->
-<!-- Archive to docs/archive/worklog-YYYY-MM.md when list exceeds 10 entries -->
-```
+If `docs/WORKLOG.md` does not exist, create it (creating `docs/` if needed) using the starter template in `assets/worklog-template.md`.
 
 If an existing worklog is missing the **Now / Next** section (older layout), add it at the top of the file before proceeding.
 
@@ -141,15 +126,7 @@ First, check whether the project's CLAUDE.md (or AGENTS.md if no CLAUDE.md exist
 Check docs/WORKLOG.md for the current task list and recent session notes before starting work.
 ```
 
-Then verify a Cursor context router rule exists at `.cursor/rules/context-router.md`. If it is missing or stale, create or replace it with this canonical content:
-
-```markdown
-For this repository, read `CLAUDE.md` before any substantive work to load project conventions and workflow constraints.
-
-Then read `docs/WORKLOG.md` for the current task list, latest shipped work, and blockers.
-
-Treat `CLAUDE.md` and context notes as supplemental project context alongside system/developer instructions and `.cursor/rules`. If guidance conflicts, prioritize system/developer instructions first, then `.cursor/rules`, then `CLAUDE.md` and context files. If this project's `CLAUDE.md` conflicts with your global context file, the project rule wins only when it explicitly states it's overriding that specific global rule; an unmarked conflict is treated as accidental drift, and the global rule stays authoritative.
-```
+Then verify a Cursor context router rule exists at `.cursor/rules/context-router.md`. If it is missing or stale, create or replace it with the canonical content in `assets/context-router-template.md`.
 
 Then update CLAUDE.md, AGENTS.md, or other context files only when something else durable changed this session, new conventions, removed patterns, renamed paths. Do not update these for session housekeeping or doc edits. If nothing else applies, say "No additional doc updates needed."
 

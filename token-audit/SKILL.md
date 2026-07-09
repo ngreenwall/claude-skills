@@ -52,6 +52,8 @@ Unused or rarely-triggered skills: no usage telemetry exists in this repo, so as
 
 **Dropped, not checked:** prompt caching (harness-managed, not file content to edit) and redundant MCP server tool descriptions (third-party server content, not editable here).
 
+**Guardrail on every check above:** a fix that saves tokens but reads worse for a human, not just one that loses an exact string, still counts as a quality cost. Flag it "uncertain" the same as a nuance-loss risk, don't propose it as a plain "safe" fix.
+
 ## PROTOCOL
 
 ### Step 1: Resolve target(s) and mode, guard against code
@@ -94,7 +96,7 @@ Check for:
 11. No effort/thinking-budget guidance for lightweight steps in an otherwise heavy workflow.
 12. Vague prompting patterns: instructions that send Claude exploring broadly instead of pointing at specific files/paths.
 
-Never touch: verbatim strings that must stay exact (commands, code blocks, canary tokens, file paths, frontmatter field names, exact trigger phrases). If a cut risks losing a nuance you're not fully sure is safe to drop, flag it "uncertain" instead of proposing a fix.
+Never touch: verbatim strings that must stay exact (commands, code blocks, canary tokens, file paths, frontmatter field names, exact trigger phrases). If a cut risks losing a nuance you're not fully sure is safe to drop, flag it "uncertain" instead of proposing a fix. Same for a cut that saves tokens but makes the file harder for a human to read or scan quickly, even if no exact string is lost, that's a quality cost too, not a free win. Flag it "uncertain" rather than "safe."
 
 Read [related docs] first so deliberate, documented choices aren't flagged as bloat.
 

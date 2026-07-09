@@ -87,21 +87,10 @@ Lead with the verdict, then three lines. Only expand a line into per-item detail
 
 If this run is a deliberate forced or simulated failure test rather than organic drift, label the scorecard `Drift check (simulated):` instead of `Drift check:` so it's never mistaken for a real incident.
 
-**All clean:**
 ```markdown
-Drift check: ✅ on-track
-- Canaries: top ✅ / mid ✅ / bottom ✅ (loaded end to end)
-- Behavior: <N>/<N> rules followed
-- Compaction: <yes | no | unsure>
-```
-
-**Drift found (expand only the failing check(s)):**
-```markdown
-Drift check: ⚠ drifting
-- Canaries: top ✅ / mid ❌ / bottom ❌ (middle/end dropped)
-- Behavior: <N>/<total> rules followed
-  - <rule>: ❌  "<evidence quote>"
-  - ... (one line per failing rule only; skip ✅ and n/a rows entirely)
+Drift check: ✅ on-track  <!-- or ⚠ drifting -->
+- Canaries: top ✅ / mid ✅ / bottom ✅ (loaded end to end)  <!-- e.g. top ✅ / mid ❌ / bottom ❌ (middle/end dropped) if failing -->
+- Behavior: <N>/<N> rules followed  <!-- if drifting, add one line per failing rule only: "  - <rule>: ❌  "<evidence quote>"" (skip ✅ and n/a rows entirely) -->
 - Compaction: <yes | no | unsure>
 ```
 
