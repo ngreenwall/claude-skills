@@ -25,7 +25,7 @@ Do NOT pre-read the context file before running the checks. The whole point is t
 This skill needs three canary tokens embedded in your global context file:
 
 1. Generate three short, unique, unguessable strings (e.g. `anchor-word-word-NN` style, or any random phrase you won't naturally type in conversation). Use a different token for each position, don't reuse one token in all three spots.
-2. Place one token near the **top** of the file (alongside your most important always-on rule, so recalling the rule and the token happen together), one in the **middle**, and one at the **bottom**. Label each clearly, e.g. `Mid-file canary: <token>` and `Canary (bottom): <token>`, and instruct the file's reader not to output the token during normal work, only when running this check.
+2. Place one token near the **top** of the file (alongside your most important always-on rule, so recalling the rule and the token happen together), one in the **middle**, and one at the **bottom**. Label each clearly, e.g. `Canary (top): <token>`, `Mid-file canary: <token>`, and `Canary (bottom): <token>`, and instruct the file's reader not to output the token during normal work, only when running this check.
 3. Note the file path so Check 1 knows what to re-read. Only needed if your global context file lives somewhere other than the standard location (e.g. `~/.claude/CLAUDE.md`).
 
 Skip setup if tokens already exist in the file from a previous run.
@@ -33,8 +33,6 @@ Skip setup if tokens already exist in the file from a previous run.
 If you use an always-on convention worth checking every time (e.g. a response-format prefix), name it in your context file, then replace the placeholder examples in this file's own Check 2 "Core rules" list (below) with your actual rules, so scorecards stay comparable across runs.
 
 If you don't have a global context file yet and want one, create it yourself, this skill won't create it for you, that's a bigger, machine-level decision than an audit tool should make on your behalf.
-
-**Using this in Cursor instead of Claude Code:** the canary/labeling mechanics are the same regardless of tool, only the file changes. Cursor's equivalent of a global context file is its User Rules (configured in Cursor Settings), place the same three labeled canaries there instead of `~/.claude/CLAUDE.md`. You can reuse `drift-check/example-global-CLAUDE.md`'s content as a starting point, just adapt it to whatever format Cursor's rules expect. Note: step 3 (noting the file path) doesn't apply here, User Rules aren't a plain file with a path, so Check 1's re-read may need to happen by you pasting the current contents back in rather than the skill reading it directly.
 
 ## PROTOCOL
 
@@ -72,17 +70,20 @@ Audit in two passes:
 
 For any ❌, quote the offending line so the drift is concrete.
 
+If this is the first assistant reply of the session, there's nothing to grade yet, mark Check 2 `n/a` rather than leaving it blank, and note it plans to grade from the next reply onward.
+
 ### Check 3, Compaction flag
 
 State whether context was compacted this session (a `/compact` ran, or a context-summary/handoff appears earlier in the thread). Compaction is a top drift trigger, but it doesn't hit every check the same way:
-- A project-root `CLAUDE.md` (or `CLAUDE.local.md`) is re-read from disk and re-injected automatically after compaction, so a Check 1 ❌ on that file after compaction is a real finding, not expected fallout, the content should have survived.
-- A `CLAUDE.md` in a subdirectory is not auto-reinjected, it only reloads the next time Claude reads a file in that subdirectory, so a ❌ there after compaction can be expected fallout until that happens.
+- Your global context file loads at session start the same way a project-root `CLAUDE.md` does, and Anthropic's docs confirm project-root `CLAUDE.md` is re-read from disk and re-injected automatically after `/compact`. The same is a reasonable expectation for the global file, though not explicitly documented by name, so a Check 1 ❌ on it after compaction should be treated as a real finding, not expected fallout, unless you have reason to think otherwise.
 - Check 2 (behavior) ❌s are always expected fallout after compaction regardless of file scope, past replies aren't retroactively fixed by a reload, only future ones are.
 - If unsure which of the above applies: say so rather than guessing.
 
 ## Output format
 
 Lead with the verdict, then three lines. Only expand a line into per-item detail when that check found a failure, a clean check stays a single summary line.
+
+If this run is a deliberate forced or simulated failure test rather than organic drift, label the scorecard `Drift check (simulated):` instead of `Drift check:` so it's never mistaken for a real incident.
 
 **All clean:**
 ```markdown

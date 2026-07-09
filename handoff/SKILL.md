@@ -19,7 +19,7 @@ In **Recent session notes**, write **Shipped** as facts the next agent needs (co
 
 ### 0. Early exit for no-op sessions
 
-Judge by session content first: did this session create or edit any files, or make any commits, including ones made mid-conversation outside this flow, and in prior `handoff`/`update-context` runs earlier in the same session? If yes, there's work to log, continue from Step 1 regardless of what git status shows.
+Judge by session content first: did this session create or edit any files, or make any commits, including ones made mid-conversation outside this flow, and in prior `handoff` runs or a separate context-update pass earlier in the same session? If yes, there's work to log, continue from Step 1 regardless of what git status shows.
 
 Only reach for `git status --porcelain` (terminal available, project is a git repo) as a confirmation check, and only once session content already points to nothing having happened, never as the primary signal. A clean working tree doesn't by itself mean nothing changed, earlier work may have already been committed and pushed outside the handoff flow, and that's real shipped work that still needs logging. Skip to Step 13 with a lightweight report only when session content says nothing happened: state that nothing changed this session, and mark every checklist line as no changes/already up to date.
 
@@ -59,7 +59,7 @@ If an existing worklog is missing the **Now / Next** section (older layout), add
 Open `$WORKLOG_PATH` → the session notes section. Read the newest 1-2 dated entries for dedup context.
 
 ### 4. Archive if needed
-If the session list already has 10 entries, archive the oldest entries to `docs/archive/worklog-YYYY-MM.md` before adding a new one. Do this before writing so the list never exceeds 10.
+If the session list already has 10 entries, archive just enough of the oldest entries to `docs/archive/worklog-YYYY-MM.md` to keep the list at or under 10 after adding the new one, typically just the single oldest entry. Do this before writing so the list never exceeds 10.
 
 ### 5. Add or update one session entry
 Get today's real date before writing, run `date +%F` (or otherwise confirm the actual date). Do not guess or reuse a date from an older entry, some tools do not receive the current date automatically.
@@ -95,6 +95,8 @@ Review the session for anything that should be added or changed in whichever loc
 - A previous decision was reversed or updated
 
 **Correcting an existing entry:** when a past decision turns out to be wrong or incomplete, don't append a second "(Correction, ...)" onto an entry that already has one. Instead, mark the original entry superseded (e.g. `Superseded by [YYYY-MM-DD entry below].`) and write a fresh entry stating the current understanding as one coherent fact. This keeps each entry scannable and means the outdated one archives out immediately under the rule below, rather than accumulating corrections indefinitely.
+
+**Ordering:** new decision entries append at the bottom (oldest-first), unlike the worklog's newest-at-top ordering, that's what makes "Superseded by [YYYY-MM-DD entry below]" accurate.
 
 **Decision log archiving:** if the decision log already has 15 entries, archive the oldest to `docs/archive/decisions-YYYY.md` (year of the archived entries) before adding a new one, mirroring the worklog's archive-at-10 rule. Also archive any entry already marked superseded, regardless of count, once a newer decision replaces it. The live log should never exceed 15 non-superseded entries.
 
@@ -156,7 +158,7 @@ Before adding any convention to CLAUDE.md, check it is not already present and s
 ### 10. Noise check
 Search `$WORKLOG_PATH` for vague language. Substitute the resolved path for `$WORKLOG_PATH` in the command below, it is a placeholder, not a real shell variable, so the literal command will not work unexpanded (e.g. use `docs/WORKLOG.md`):
 ```bash
-grep -En "maybe|investigate later|brainstorm" docs/WORKLOG.md
+grep -Ein "maybe|investigate later|brainstorm" docs/WORKLOG.md
 ```
 Fix any matches in dated session entries only. Ignore matches elsewhere in the file.
 

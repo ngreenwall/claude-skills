@@ -2,13 +2,16 @@
 
 ## Now / Next
 <!-- Checklist. "Now" items first (1-3 max), then queued items. -->
-- [ ]
+- [ ] Add a Check 2 precedence-override rule to drift-check: an apparent ❌ that's actually a deliberate, correct override by a lower-precedence file shouldn't grade as drift
+- [ ] Decide/patch `context-router.md`'s canonical template: it doesn't say which wins when a project `CLAUDE.md` and the global context file directly conflict (affects `handoff` and `project-init`, not just drift-check)
 
 ### Ideas
 <!-- Unscoped, someday. -->
 
 ## Session notes
 <!-- Newest entry at top. Format: YYYY-MM-DD | Shipped: ... | Next: ... | Blockers: ... -->
+2026-07-09 | Shipped: QA'd `drift-check/SKILL.md`: fixed Check 3, which described project-root/subdirectory CLAUDE.md reinjection despite the skill's own global-file-only scope, verified against Anthropic's memory docs, rewrote to describe the global file directly; added a missing `Canary (top):` label example in Setup; Check 2 now handles first-reply-of-session as `n/a` instead of leaving it undefined; added a `Drift check (simulated):` label for forced/test runs so they're never mistaken for real drift; removed the Cursor-adaptation paragraph from Setup entirely, drift-check is Claude Code only now, matching what the README already claimed; superseded and archived the 2026-07-03 Cursor-template decision in `CLAUDE.md`, replaced by a 2026-07-09 entry recording the Claude-Code-only scope. | Next: Check 2 still needs a precedence-override rule (an apparent ❌ that's actually a deliberate, correct override by a lower-precedence file shouldn't grade as drift); separately, `context-router.md`'s canonical template doesn't say which wins when a project `CLAUDE.md` and the global context file directly conflict, worth a decision (affects `handoff` and `project-init` too, not just drift-check).
+
 2026-07-09 | Shipped: `handoff/SKILL.md` Step 0 early-exit rule now judges by session content first, files edited/created or commits made this session, including mid-conversation commits made outside the handoff flow, `git status --porcelain` is only a confirmation check once session content already says nothing happened, not the primary signal, since a clean tree can just mean earlier work was already committed and pushed outside handoff, not that nothing shipped; tightened the wording of that same paragraph for readability, no behavior change. | Next: none pending from this session.
 
 2026-07-09 | Shipped: `handoff/SKILL.md` now instructs superseding a decision entry and writing a fresh one, instead of stacking a second inline "(Correction, ...)" onto it; applied that to `CLAUDE.md`'s 2026-07-03 auto-invocation entry, superseded and archived to `docs/archive/decisions-2026.md`, replaced by a single current-state 2026-07-09 entry (Cursor has no skills mechanism; Claude.ai/Cowork upload path is Customize > Skills > "+" > "+ Create skill" > "Upload a skill"). | Next: none pending from this session.

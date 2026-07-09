@@ -1,3 +1,4 @@
 # Archived decisions
 
 - [2026-07-03] SKILL.md auto-invocation is Claude Code specific; Cursor doesn't scan .claude/skills/. Superseded by [2026-07-09]: Cursor has no skills mechanism at all (SKILL.md auto-invocation is Claude Code specific). Claude.ai/Cowork's account-level install path is Customize > Skills > "+" > "+ Create skill" > "Upload a skill".
+- [2026-07-03] No separate Cursor-global-rules template was built for drift-check. Content would duplicate example-global-CLAUDE.md, and Cursor's exact User Rules storage mechanism isn't confirmed, so the SKILL.md points users to adapt the existing example instead. Superseded by [2026-07-09]: drift-check is Claude Code only; removed the Cursor adaptation paragraph from Setup, it contradicted the README's own claim that Cursor isn't supported, and kept the skill scoped to one tool it's actually validated against.
