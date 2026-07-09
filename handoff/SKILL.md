@@ -92,6 +92,8 @@ Review the session for anything that should be added or changed in whichever loc
 - An alternative was explicitly ruled out
 - A previous decision was reversed or updated
 
+**Correcting an existing entry:** when a past decision turns out to be wrong or incomplete, don't append a second "(Correction, ...)" onto an entry that already has one. Instead, mark the original entry superseded (e.g. `Superseded by [YYYY-MM-DD entry below].`) and write a fresh entry stating the current understanding as one coherent fact. This keeps each entry scannable and means the outdated one archives out immediately under the rule below, rather than accumulating corrections indefinitely.
+
 For each proposed change, show it in this format before writing:
 
 > **[file path]** Action (add|update|remove): proposed content
