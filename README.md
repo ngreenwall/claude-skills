@@ -4,6 +4,7 @@
 
 A "skill" is a folder with a `SKILL.md` file inside it (YAML frontmatter with `name` and `description`, then markdown instructions) that tells Claude how to run a specific workflow. Skills can optionally bundle scripts or other resources, but the three in this repo are pure markdown, no code, no build step.  
 
+
 ## Contents
 
 - [How to install (Claude Code)](#how-to-install-for-claude-code)
@@ -15,7 +16,6 @@ A "skill" is a folder with a `SKILL.md` file inside it (YAML frontmatter with `n
   - [drift-check](#drift-check) (Claude Code only)
 - [License](#license)
 
----
 
 ## How to install for Claude Code
 
@@ -32,8 +32,6 @@ Cursor won't auto-discover a `SKILL.md`, but you can get the same workflow by tu
 
 Note: `drift-check` isn't built for Cursor yet, only the Claude Code version ships here, though the mechanism could work since Cursor's User Rules auto-load every session too.
 
----
-
 ## Using these in Chat or Cowork
 
 **Claude.ai Chat** can't do any of this: no persistent access to a project folder, only files you manually attach to one conversation.
@@ -42,7 +40,6 @@ Note: `drift-check` isn't built for Cursor yet, only the Claude Code version shi
 
 To install a skill: Customize > Skills > "+" > "+ Create skill" > "Upload a skill" (zip the folder first).
 
----
 
 ## Skills
 
@@ -55,7 +52,6 @@ Asks two questions: simple or in-depth project? Will it live on git? Then create
 - **Use it:** first thing in a brand-new repo, before your first `handoff`.
 - **Don't use it:** for end-of-session updates in a repo that's already set up, that's `handoff`.
 
----
 
 ### [handoff](handoff/SKILL.md)
 
@@ -66,7 +62,6 @@ Logs one dated session entry (`Shipped` / `Next` / `Blockers`) in `docs/WORKLOG.
 - **Use it:** when wrapping up a work session on a project that already has `project-init`'s scaffolding. Also good when your session is getting long and you want to start a fresh one, running it first preserves state before context gets compacted or lost.
 - **Don't use it:** for new-project bootstrap, or general "what's the status" questions mid-session.
 
----
 
 ### [drift-check](drift-check/SKILL.md) (Claude Code only)
 
@@ -86,7 +81,6 @@ Scoped to the global file on purpose: it's usually the long, dense one that accu
 3. **Place and label them in your global context file.** Label each clearly: `Canary (top):`, `Mid-file canary:`, `Canary (bottom):`. Put the top one next to whatever rule you consider most important. Tell your context file not to output these tokens during normal work, only when a drift check runs.
 4. **Pick your own "always-on" rules to check every time.** A common one is a response-format prefix, if you want your assistant to start every reply with a tag (e.g. "Agent:", "Bot:", your own name, or nothing at all), name that convention in your context file and list it as one of the core rules in `drift-check/SKILL.md`'s Check 2 section. Skip this if you don't use a prefix convention.
 5. **Note the file path** so the skill knows what to re-read when checking. Only needed if your global context file lives somewhere other than the standard location (e.g. `~/.claude/CLAUDE.md`).
-
 
 
 ## License
