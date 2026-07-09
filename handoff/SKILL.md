@@ -94,16 +94,16 @@ Review the session for anything that should be added or changed in whichever loc
 
 **Correcting an existing entry:** when a past decision turns out to be wrong or incomplete, don't append a second "(Correction, ...)" onto an entry that already has one. Instead, mark the original entry superseded (e.g. `Superseded by [YYYY-MM-DD entry below].`) and write a fresh entry stating the current understanding as one coherent fact. This keeps each entry scannable and means the outdated one archives out immediately under the rule below, rather than accumulating corrections indefinitely.
 
-For each proposed change, show it in this format before writing:
+**Decision log archiving:** if the decision log already has 15 entries, archive the oldest to `docs/archive/decisions-YYYY.md` (year of the archived entries) before adding a new one, mirroring the worklog's archive-at-10 rule. Also archive any entry already marked superseded, regardless of count, once a newer decision replaces it. The live log should never exceed 15 non-superseded entries.
 
-> **[file path]** Action (add|update|remove): proposed content
+For each proposed change, show it in this format before writing, including any archive move (which file it's moving to and what's being removed from the live log) as one of the proposed changes, not something applied silently after confirmation:
+
+> **[file path]** Action (add|update|remove|archive): proposed content
 > *Why:* one-line rationale
 
 If nothing qualifies, say "No spec or decision updates needed" and move on.
 
 Wait for confirmation before writing. If the user approves, apply all at once. Use today's date on new decision entries.
-
-**Decision log archiving:** if the decision log already has 15 entries, archive the oldest to `docs/archive/decisions-YYYY.md` (year of the archived entries) before adding a new one, mirroring the worklog's archive-at-10 rule. Also archive any entry already marked superseded, regardless of count, once a newer decision replaces it. Do this before writing so the live log never exceeds 15 non-superseded entries.
 
 **Escalation:** if the "What this is" and "Key decisions" sections in `CLAUDE.md` exceed roughly a screen of content, propose moving them to `docs/PROJECT.md` (spec section + decision log section), leaving a one-line pointer in `CLAUDE.md`. Apply only with user confirmation, and note the move in the completion checklist.
 
