@@ -57,7 +57,7 @@ After scoring from memory, read the context file and confirm the tokens match. F
 
 Grade the last several assistant replies in this session against the context file's rules. One row per rule, ✅/❌, with a one-line verbatim evidence quote from a recent reply. If a drift-check already ran this session, grade only the replies since it; earlier violations were already reported and corrected.
 
-This check is self-assessment, so trust it less than Check 1. The same drift that corrupts output can corrupt this grading (a drifted model may rate itself ✅). Check 1 (canary recall) is the objective anchor. If Check 1 fails, distrust a clean Check 2, the model likely cannot grade itself reliably either.
+This check is self-assessment, so trust it less than Check 1. The same drift that corrupts output can corrupt this grading (a drifted model may rate itself ✅). Check 1 (canary recall) is the objective anchor. If Check 1 fails, distrust a clean Check 2. The model likely cannot grade itself reliably either.
 
 Audit in two passes:
 
@@ -70,7 +70,7 @@ Audit in two passes:
 
 For any ❌, quote the offending line so the drift is concrete.
 
-Before marking a rule ❌, check whether a lower-precedence file (e.g. a project `CLAUDE.md`) explicitly marks itself as overriding that specific global rule. An explicitly-marked override isn't drift, mark it `n/a (overridden by <file>)` instead. An unmarked conflict still counts as drift, don't assume intent without an explicit marker.
+Before marking a rule ❌, read the project's `CLAUDE.md` (if one exists) alongside the already re-read global file, and check whether it explicitly marks itself as overriding that specific global rule. An explicitly-marked override isn't drift, mark it `n/a (overridden by <file>)` instead. An unmarked conflict still counts as drift, don't assume intent without an explicit marker.
 
 If this is the first assistant reply of the session, there's nothing to grade yet, mark Check 2 `n/a` rather than leaving it blank, and note it plans to grade from the next reply onward.
 
