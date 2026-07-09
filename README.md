@@ -14,7 +14,7 @@ A "skill" is a folder with a `SKILL.md` file inside it (YAML frontmatter with `n
   - [project-init](#project-init)
   - [handoff](#handoff)
   - [drift-check](#drift-check) (Claude Code only)
-  - [qa-audit](#qa-audit) (Claude Code and Cowork)
+  - [qa-audit](#qa-audit) (Claude Code only)
 - [License](#license)
 
 
@@ -39,7 +39,7 @@ Note: `qa-audit` relies on spawning a separate subagent (an `Agent`-tool call) p
 
 **Claude.ai Chat** can't do any of this: no persistent access to a project folder, only files you manually attach to one conversation.
 
-**Cowork** has folder access and subagents, so `project-init`, `handoff`, and `qa-audit` could all work there. `drift-check` can't: it needs a global `CLAUDE.md` to auto-load every session, and Cowork doesn't do that.
+**Cowork** has folder access and subagents, so `project-init` and `handoff` could work there. `drift-check` can't: it needs a global `CLAUDE.md` to auto-load every session, and Cowork doesn't do that. `qa-audit` isn't offered there either, it ships Claude Code only for now.
 
 To install a skill: Customize > Skills > "+" > "+ Create skill" > "Upload a skill" (zip the folder first).
 
@@ -66,9 +66,9 @@ Logs one dated session entry (`Shipped` / `Next` / `Blockers`) in `docs/WORKLOG.
 - **Don't use it:** for new-project bootstrap, or general "what's the status" questions mid-session.
 
 
-### [drift-check](drift-check/SKILL.md) (Claude Code only)
+### [drift-check](drift-check/SKILL.md)
 
-> On-demand audit that checks whether your global context file is still being followed.
+> On-demand audit that checks whether your global context file is still being followed. Claude Code only.
 
 Checks your **global** context file (the standing instructions your AI tool loads every session, e.g. `~/.claude/CLAUDE.md`) and pinpoints where in the file it dropped: top, middle, or bottom. Long sessions and context compaction silently drop rules; this catches it.
 
@@ -86,9 +86,9 @@ Scoped to the global file on purpose: it's usually the long, dense one that accu
 5. **Note the file path** so the skill knows what to re-read when checking. Only needed if your global context file lives somewhere other than the standard location (e.g. `~/.claude/CLAUDE.md`).
 
 
-### [qa-audit](qa-audit/SKILL.md) (Claude Code and Cowork)
+### [qa-audit](qa-audit/SKILL.md)
 
-> Static-analysis QA pass over instruction/config prose, not code.
+> Static-analysis QA pass over instruction/config prose, not code. Claude Code only.
 
 Spawns one Opus subagent per file (`SKILL.md`, `CLAUDE.md`, your global context file, `README.md`) to check for internal contradictions, dead or unreachable logic, unstated dependencies, style violations, and cross-file consistency. It reads and reasons about the file, it never runs the skill or file against real prompts. Proposes fixes and waits for confirmation before editing anything.
 

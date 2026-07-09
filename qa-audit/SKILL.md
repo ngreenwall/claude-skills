@@ -36,15 +36,19 @@ If the file is managed by a sync tool that generates copies elsewhere (e.g. a to
 
 ### Step 2: Gather context
 
-Read related docs (README, decision logs, sibling skills) so deliberate, documented choices aren't misflagged as bugs.
+Read related docs yourself (README, decision logs, sibling skills) so you can fill in the prompt template below accurately, what the file's purpose is, and which related docs to point the subagent at.
 
 ### Step 3: Spawn QA agents
 
-Launch one `Agent` tool call per target file, `model: "opus"`, using the prompt template below with placeholders filled in for that file. If multiple files, launch all of them in the same message so they run in parallel.
+Launch one `Agent` tool call per target file, `model: "opus"`, using the prompt template below with placeholders filled in for that file. Launch all calls in the same message so they run in parallel.
+
+If auditing 4+ files at once (e.g. a full-library audit), batch small files (`SKILL.md` files under ~100 lines) 2-3 per agent call instead of 1:1, listing each file's path and purpose in the same prompt and asking for findings grouped by file. Keep larger or higher-risk files (your global context file, `CLAUDE.md`, any file over ~100 lines) on their own agent call.
 
 **QA prompt template (fill in placeholders per file):**
 ```
-You're QAing [file(s)/system] in [repo/location]. Purpose: [what it's supposed to do].
+You're QAing [file] in [repo/location]. Purpose: [what it's supposed to do].
+
+Don't trust any line numbers given, find the real match by content first.
 
 Check for:
 1. Unstated dependencies, a step/section that assumes something exists or was already read/produced, but nothing upstream actually does that.
@@ -52,16 +56,15 @@ Check for:
 3. Dead or unreachable logic, steps that can never trigger, or reference something renamed/removed.
 4. Style violations, [house style rules, e.g. no em dashes, no vague hedge words].
 5. Cross-file consistency, if multiple files reference each other, confirm paths/claims/section names still match.
-6. Don't trust any line numbers given, find the real match by content first.
 
 Read [related docs, e.g. README, decision log] for context so deliberate, documented choices aren't flagged as bugs.
 
 Output one finding per issue: location, quoted text, why it's a problem, proposed fix. Don't apply fixes, just report. Rank by likelihood of causing real bad behavior vs. just reading oddly. End with a summary count by severity.
 ```
 
-If the target carries YAML frontmatter (any `SKILL.md`, or a global/rule source file), append this 7th check item to the prompt:
+If the target carries YAML frontmatter (any `SKILL.md`, or a global/rule source file), append this 6th check item to the prompt:
 ```
-7. Frontmatter/convention violations: kebab-case name (for skills), pushy description with named trigger phrases, negative triggers present if the skill is narrow or heavy, all required frontmatter fields present (name, description).
+6. Frontmatter/convention violations: kebab-case name (for skills), pushy description with named trigger phrases, negative triggers present if the skill is narrow or heavy, all required frontmatter fields present (name, description).
 ```
 
 ### Step 4: Compile findings
