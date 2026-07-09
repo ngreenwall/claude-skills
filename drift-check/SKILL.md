@@ -24,7 +24,7 @@ Do NOT pre-read the context file before running the checks. The whole point is t
 
 This skill needs three canary tokens embedded in your global context file:
 
-1. Generate three short, unique, unguessable strings (e.g. `anchor-word-word-NN` style, or any random phrase you won't naturally type in conversation). Use a different token for each position, don't reuse one token in all three spots.
+1. Generate three short, unique, unguessable strings (e.g. `word-word-NN` style, or any random phrase you won't naturally type in conversation). Use a different token for each position, don't reuse one token in all three spots.
 2. Place one token near the **top** of the file (alongside your most important always-on rule, so recalling the rule and the token happen together), one in the **middle**, and one at the **bottom**. Label each clearly, e.g. `Canary (top): <token>`, `Mid-file canary: <token>`, and `Canary (bottom): <token>`, and instruct the file's reader not to output the token during normal work, only when running this check.
 3. Note the file path so Check 1 knows what to re-read. Only needed if your global context file lives somewhere other than the standard location (e.g. `~/.claude/CLAUDE.md`).
 
@@ -70,7 +70,7 @@ Audit in two passes:
 
 For any ❌, quote the offending line so the drift is concrete.
 
-Before marking a rule ❌, read the project's `CLAUDE.md` (if one exists) alongside the already re-read global file, and check whether it explicitly marks itself as overriding that specific global rule. An explicitly-marked override isn't drift, mark it `n/a (overridden by <file>)` instead. An unmarked conflict still counts as drift, don't assume intent without an explicit marker.
+Before marking a rule ❌, read the project's `CLAUDE.md` (if one exists), consulted here only to detect explicit overrides, not audited for its own drift, alongside the already re-read global file, and check whether it explicitly marks itself as overriding that specific global rule. An explicitly-marked override isn't drift, mark it `n/a (overridden by <file>)` instead. An unmarked conflict still counts as drift, don't assume intent without an explicit marker.
 
 If this is the first assistant reply of the session, there's nothing to grade yet, mark Check 2 `n/a` rather than leaving it blank, and note it plans to grade from the next reply onward.
 

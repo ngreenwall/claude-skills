@@ -82,14 +82,14 @@ If neither exists, skip this step.
 
 Review the session for anything that should be added or changed in whichever location exists:
 
-**Spec content** — flag if any of these changed this session:
+**Spec content:** flag if any of these changed this session:
 - What the project does or why it exists
 - Who it's for
 - Goals or success criteria
 - What's explicitly out of scope
 - Key constraints (stack, platform, team, timeline)
 
-**Decision content** — flag if any of these occurred this session:
+**Decision content:** flag if any of these occurred this session:
 - A key architecture, design, or scope decision was made
 - An alternative was explicitly ruled out
 - A previous decision was reversed or updated
@@ -115,7 +115,7 @@ Wait for confirmation before writing. If the user approves, apply all at once. U
 
 Open the **Now / Next** section at the top of `$WORKLOG_PATH` (Step 2 guarantees it exists).
 
-- Review the current items. For each item that matches something in the Shipped field of the session entry you just wrote, delete it (not check it off — delete it, so the list stays clean). The session notes already have the history.
+- Review the current items. For each item that matches something in the Shipped field of the session entry you just wrote, delete it (don't just check it off), so the list stays clean. The session notes already have the history.
 - Keep 1-3 active items at the top; pull queued items up as active ones clear.
 - Add any new next actions from this session's Next field.
 - Leave **Ideas** untouched unless the user explicitly moved something.
@@ -141,7 +141,7 @@ First, check whether the project's CLAUDE.md (or AGENTS.md if no CLAUDE.md exist
 Check $WORKLOG_PATH for the current task list and recent session notes before starting work.
 ```
 
-Then verify a Cursor context router rule exists at `.cursor/rules/context-router.md`. If it is missing or stale, create or replace it with this canonical content (substitute `$WORKLOG_PATH` with the resolved path, e.g. `docs/WORKLOG.md`):
+Then verify a Cursor context router rule exists at `.cursor/rules/context-router.md`. If it is missing or stale, create or replace it with this canonical content:
 
 ```markdown
 For this repository, read `CLAUDE.md` before any substantive work to load project conventions and workflow constraints.
@@ -168,7 +168,7 @@ If carryover context matters for the next chat, write a one-paragraph starter pr
 ### 12. Commit and push all changes
 Claude Code / terminal only, if terminal access is unavailable (e.g. Cursor without shell), skip this step and note it as manual follow-up.
 
-If the project is not a git repo (no `.git`), skip this step and note it in the checklist; the user chose no-git at init. Otherwise check for uncommitted changes with `git status --porcelain`. If there are none, skip. If there are, stage everything and commit in one push — this is a single-contributor personal repo workflow. If no remote is configured, commit but skip the push and note it. For a shared or multi-contributor repo, propose a branch and PR instead of pushing straight to main.
+If the project is not a git repo (no `.git`), skip this step and note it in the checklist; the user chose no-git at init. Otherwise check for uncommitted changes with `git status --porcelain`. If there are none, skip. If there are, stage everything and commit in one push, this is a single-contributor personal repo workflow. If no remote is configured, commit but skip the push and note it. For a shared or multi-contributor repo, propose a branch and PR instead of pushing straight to main.
 
 ```bash
 git add -A && git commit -m "Handoff: <YYYY-MM-DD> session notes" && git push
