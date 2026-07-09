@@ -70,6 +70,8 @@ Audit in two passes:
 
 For any ❌, quote the offending line so the drift is concrete.
 
+Before marking a rule ❌, check whether a lower-precedence file (e.g. a project `CLAUDE.md`) explicitly marks itself as overriding that specific global rule. An explicitly-marked override isn't drift, mark it `n/a (overridden by <file>)` instead. An unmarked conflict still counts as drift, don't assume intent without an explicit marker.
+
 If this is the first assistant reply of the session, there's nothing to grade yet, mark Check 2 `n/a` rather than leaving it blank, and note it plans to grade from the next reply onward.
 
 ### Check 3, Compaction flag

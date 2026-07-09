@@ -52,7 +52,7 @@ Do not infer the answer from file types or folder contents, only the user knows 
    ```markdown
    For this repository, read `CLAUDE.md` before any substantive work to load project conventions and constraints.
 
-   Treat `CLAUDE.md` as supplemental project context alongside system/developer instructions and `.cursor/rules`. If guidance conflicts, prioritize system/developer instructions first, then `.cursor/rules`, then `CLAUDE.md`.
+   Treat `CLAUDE.md` as supplemental project context alongside system/developer instructions and `.cursor/rules`. If guidance conflicts, prioritize system/developer instructions first, then `.cursor/rules`, then `CLAUDE.md`. If `CLAUDE.md` conflicts with your global context file, it wins only when it explicitly says it's overriding that specific global rule; otherwise the global rule stays authoritative.
    ```
 
 5. Do not create WORKLOG.md or a `docs/` folder, a simple project doesn't need session scaffolding. If it grows into a real build later, rerun `project-init` and answer "in-depth"; it patches in the missing files.
@@ -135,7 +135,7 @@ For this repository, read `CLAUDE.md` before any substantive work to load projec
 
 Then read `docs/WORKLOG.md` for the current task list, latest shipped work, and blockers.
 
-Treat `CLAUDE.md` and context notes as supplemental project context alongside system/developer instructions and `.cursor/rules`. If guidance conflicts, prioritize system/developer instructions first, then `.cursor/rules`, then `CLAUDE.md` and context files.
+Treat `CLAUDE.md` and context notes as supplemental project context alongside system/developer instructions and `.cursor/rules`. If guidance conflicts, prioritize system/developer instructions first, then `.cursor/rules`, then `CLAUDE.md` and context files. If this project's `CLAUDE.md` conflicts with your global context file, the project rule wins only when it explicitly states it's overriding that specific global rule; an unmarked conflict is treated as accidental drift, and the global rule stays authoritative.
 ```
 
 ### Step 7: Report completion checklist (required)
