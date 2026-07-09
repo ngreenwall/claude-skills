@@ -9,7 +9,7 @@
 
 ## Session notes
 <!-- Newest entry at top. Format: YYYY-MM-DD | Shipped: ... | Next: ... | Blockers: ... -->
-2026-07-09 | Shipped: `handoff/SKILL.md` Step 0 early-exit rule now judges by session content first, files edited/created or commits made this session, including mid-conversation commits made outside the handoff flow, `git status --porcelain` is only a confirmation check once session content already says nothing happened, not the primary signal, since a clean tree can just mean earlier work was already committed and pushed outside handoff, not that nothing shipped. | Next: none pending from this session.
+2026-07-09 | Shipped: `handoff/SKILL.md` Step 0 early-exit rule now judges by session content first, files edited/created or commits made this session, including mid-conversation commits made outside the handoff flow, `git status --porcelain` is only a confirmation check once session content already says nothing happened, not the primary signal, since a clean tree can just mean earlier work was already committed and pushed outside handoff, not that nothing shipped; tightened the wording of that same paragraph for readability, no behavior change. | Next: none pending from this session.
 
 2026-07-09 | Shipped: `handoff/SKILL.md` now instructs superseding a decision entry and writing a fresh one, instead of stacking a second inline "(Correction, ...)" onto it; applied that to `CLAUDE.md`'s 2026-07-03 auto-invocation entry, superseded and archived to `docs/archive/decisions-2026.md`, replaced by a single current-state 2026-07-09 entry (Cursor has no skills mechanism; Claude.ai/Cowork upload path is Customize > Skills > "+" > "+ Create skill" > "Upload a skill"). | Next: none pending from this session.
 
