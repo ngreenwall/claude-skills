@@ -36,7 +36,7 @@ If the file is managed by a sync tool that generates copies elsewhere (e.g. a to
 
 ### Step 2: Gather context
 
-Read related docs yourself (README, decision logs, sibling skills) so you can fill in the prompt template below accurately, what the file's purpose is, and which related docs to point the subagent at.
+Gather just enough context so the subagent doesn't misflag deliberate, documented choices as bugs: check your project's decision log (if one exists) for entries matching the target file/skill's name, and check sibling skills only if the target references them by name. Skip a full README read unless the target file directly references it.
 
 ### Step 3: Spawn QA agents
 
@@ -59,7 +59,7 @@ Check for:
 
 Read [related docs, e.g. README, decision log] for context so deliberate, documented choices aren't flagged as bugs.
 
-Output one finding per issue: location, quoted text, why it's a problem, proposed fix. Don't apply fixes, just report. Rank by likelihood of causing real bad behavior vs. just reading oddly. End with a summary count by severity.
+Output one finding per issue: location, quoted text, why it's a problem, proposed fix. Don't apply fixes, just report. Keep each finding to 2-3 sentences, no preamble or restated reasoning. Rank by likelihood of causing real bad behavior vs. just reading oddly. End with a summary count by severity.
 ```
 
 If the target carries YAML frontmatter (any `SKILL.md`, or a global/rule source file), append this 6th check item to the prompt:
@@ -69,7 +69,9 @@ If the target carries YAML frontmatter (any `SKILL.md`, or a global/rule source 
 
 ### Step 4: Compile findings
 
-Merge results across all target files into one list, ranked by severity (likelihood of causing real bad behavior vs. just reading oddly). End with a summary count by severity.
+Merge results across all target files into one list, ranked by severity (likelihood of causing real bad behavior vs. just reading oddly). Keep the merged report compact, one line of context plus the proposed fix per finding, don't restate each subagent's reasoning. End with a summary count by severity.
+
+On a full-library run (4+ files), suggest compacting the conversation here before Step 5, the raw agent transcripts are no longer needed once findings are compiled.
 
 ### Step 5: Propose fixes, wait for confirmation
 

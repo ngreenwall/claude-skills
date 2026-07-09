@@ -2,7 +2,7 @@
 
 > Public skills for Claude Code, portable to Cursor and Claude.ai/Cowork, no dependency on any private repo or personal setup.
 
-A "skill" is a folder with a `SKILL.md` file inside it (YAML frontmatter with `name` and `description`, then markdown instructions) that tells Claude how to run a specific workflow. Skills can optionally bundle scripts or other resources, but the four in this repo are pure markdown, no code, no build step.  
+A "skill" is a folder with a `SKILL.md` file inside it (YAML frontmatter with `name` and `description`, then markdown instructions) that tells Claude how to run a specific workflow. Skills can optionally bundle scripts or other resources, but the five in this repo are pure markdown, no code, no build step.  
 
 
 ## Contents
@@ -15,6 +15,7 @@ A "skill" is a folder with a `SKILL.md` file inside it (YAML frontmatter with `n
   - [handoff](#handoff)
   - [drift-check](#drift-check) (Claude Code only)
   - [qa-audit](#qa-audit) (Claude Code only)
+  - [token-audit](#token-audit) (Claude Code only)
 - [License](#license)
 
 
@@ -33,13 +34,13 @@ Cursor won't auto-discover a `SKILL.md`, but you can get the same workflow by tu
 
 Note: `drift-check` isn't built for Cursor yet, only the Claude Code version ships here, though the mechanism could work since Cursor's User Rules auto-load every session too.
 
-Note: `qa-audit` relies on spawning a separate subagent (an `Agent`-tool call) per file being audited, that's a Claude Code mechanism a Cursor project rule can't reproduce. Converting it would collapse to a single self-audit pass with no parallelization, not the same workflow.
+Note: `qa-audit` and `token-audit` both rely on spawning a separate subagent (an `Agent`-tool call) per file, that's a Claude Code mechanism a Cursor project rule can't reproduce. Converting either would collapse to a single self-audit pass with no parallelization, not the same workflow.
 
 ## Using these in Chat or Cowork
 
 **Claude.ai Chat** can't do any of this: no persistent access to a project folder, only files you manually attach to one conversation.
 
-**Cowork** has folder access and subagents, so `project-init` and `handoff` could work there. `drift-check` can't: it needs a global `CLAUDE.md` to auto-load every session, and Cowork doesn't do that. `qa-audit` isn't offered there either, it ships Claude Code only for now.
+**Cowork** has folder access and subagents, so `project-init` and `handoff` could work there. `drift-check` can't: it needs a global `CLAUDE.md` to auto-load every session, and Cowork doesn't do that. `qa-audit` and `token-audit` aren't offered there either, they ship Claude Code only for now.
 
 To install a skill: Customize > Skills > "+" > "+ Create skill" > "Upload a skill" (zip the folder first).
 
@@ -92,8 +93,22 @@ Scoped to the global file on purpose: it's usually the long, dense one that accu
 
 Spawns one Opus subagent per file (`SKILL.md`, `CLAUDE.md`, your global context file, `README.md`) to check for internal contradictions, dead or unreachable logic, unstated dependencies, style violations, and cross-file consistency. It reads and reasons about the file, it never runs the skill or file against real prompts. Proposes fixes and waits for confirmation before editing anything.
 
+Uses `model: "opus"` by default for the subagent calls. To use a different model, edit the `model: "opus"` line in `qa-audit/SKILL.md`.
+
 - **Use it:** when you want a second, skeptical pass on instruction/config prose you wrote, e.g. "QA this skill" or "audit CLAUDE.md."
 - **Don't use it:** to check whether global context actually loaded in a live session (that's `drift-check`), to grade a skill's real-prompt outputs (that's skill-creator's eval feature), or on code diffs (use `/code-review`).
+
+
+### [token-audit](token-audit/SKILL.md)
+
+> Audits instruction/config prose and this repo's skill architecture for token bloat. Claude Code only.
+
+Spawns one Opus subagent per file (`SKILL.md`, `CLAUDE.md`, your global context file, `README.md`) to flag token-bloat patterns, oversized files, missing navigation, duplicate content across files, and unscoped instructions, then proposes fixes: rewrite, split into a reference file, merge, add navigation, or remove. Single-file mode by default; full-library mode also checks for duplicate content across files and asks which skills you actually use.
+
+Uses `model: "opus"` by default for the subagent calls. To use a different model, edit the `model: "opus"` line in `token-audit/SKILL.md`.
+
+- **Use it:** when you want to cut the token cost of a file or the whole skills library, e.g. "audit tokens on CLAUDE.md" or "is this skill too big."
+- **Don't use it:** to find bugs, contradictions, or dead logic (that's `qa-audit`), or on code files.
 
 
 ## License
