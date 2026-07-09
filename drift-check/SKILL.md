@@ -16,6 +16,8 @@ This skill targets the global file specifically because that's usually the long,
 
 If you ever notice yourself violating a project-specific rule mid-session (e.g. editing a file you were told not to touch), that's a signal you might want a lightweight check for that project file too, but don't set one up preemptively, only add it once you've actually seen it happen.
 
+This skill audits CLAUDE.md specifically, your own written instructions. It's a separate system from Claude Code's auto memory (`~/.claude/projects/<project>/memory/MEMORY.md`), notes Claude writes about itself as it works. Auto memory is out of scope here, there's nothing to audit for drift since Claude, not you, decides what goes in it.
+
 Do NOT pre-read the context file before running the checks. The whole point is to test what is actually loaded in the current context window. Reproduce from memory, then you may verify against the file in step 1.
 
 ## Setup (one-time, before first use)
@@ -72,29 +74,35 @@ For any ❌, quote the offending line so the drift is concrete.
 
 ### Check 3, Compaction flag
 
-State whether context was compacted this session (a `/compact` ran, or a context-summary/handoff appears earlier in the thread). Compaction is a top drift trigger.
-- If yes: recommend the user re-run this check and treat any ❌ as expected fallout from the compaction.
-- If unsure: say so rather than guessing.
+State whether context was compacted this session (a `/compact` ran, or a context-summary/handoff appears earlier in the thread). Compaction is a top drift trigger, but it doesn't hit every check the same way:
+- A project-root `CLAUDE.md` (or `CLAUDE.local.md`) is re-read from disk and re-injected automatically after compaction, so a Check 1 ❌ on that file after compaction is a real finding, not expected fallout, the content should have survived.
+- A `CLAUDE.md` in a subdirectory is not auto-reinjected, it only reloads the next time Claude reads a file in that subdirectory, so a ❌ there after compaction can be expected fallout until that happens.
+- Check 2 (behavior) ❌s are always expected fallout after compaction regardless of file scope, past replies aren't retroactively fixed by a reload, only future ones are.
+- If unsure which of the above applies: say so rather than guessing.
 
 ## Output format
 
+Lead with the verdict, then three lines. Only expand a line into per-item detail when that check found a failure, a clean check stays a single summary line.
+
+**All clean:**
 ```markdown
-Drift check:
-
-1. Load + depth
-   - Top canary:    ✅/❌  "<reproduced text>"
-   - Mid canary:    ✅/❌  `<token>`
-   - Bottom canary: ✅/❌  `<token>`
-   - Verdict: <loaded end to end | middle dropped | not loaded>
-
-2. Behavior audit
-   - <rule>: ✅/❌/n/a  "<evidence quote>"
-   - ... (core rules first, then derived rules)
-
-3. Compaction: <yes | no | unsure>, <one-line implication>
-
-Overall: <on-track | drifting: which rules, which depth>
+Drift check: ✅ on-track
+- Canaries: top ✅ / mid ✅ / bottom ✅ (loaded end to end)
+- Behavior: <N>/<N> rules followed
+- Compaction: <yes | no | unsure>
 ```
+
+**Drift found (expand only the failing check(s)):**
+```markdown
+Drift check: ⚠ drifting
+- Canaries: top ✅ / mid ❌ / bottom ❌ (middle/end dropped)
+- Behavior: <N>/<total> rules followed
+  - <rule>: ❌  "<evidence quote>"
+  - ... (one line per failing rule only; skip ✅ and n/a rows entirely)
+- Compaction: <yes | no | unsure>
+```
+
+`<total>` for the Behavior line is the count of rules actually graded (core + derived, excluding `n/a`). Compaction only expands past one line if it's flagging fallout, e.g. "Compaction: yes, treat any ❌ above as expected fallout."
 
 If drift is found, end with one plain-language sentence naming who acts and when, no shorthand tags, no jargon:
 - Behavior fix (Check 2): say "I'll self-correct this starting with my next reply, you don't need to do anything."
@@ -125,4 +133,4 @@ Hard limits:
 - Re-read only. Do NOT edit any file to "fix" drift; that needs confirmation.
 - One retry max. Do not loop.
 - If a canary fails to load even after re-reading (file-not-loaded case), stop and tell the user to check the path/filename, you cannot fix that yourself.
-- If drift recurs across sessions, flag it: the file may be too long, and the real fix is shortening it, not re-reading.
+- If drift recurs across sessions, flag it: the file may be too long, and the real fix is shortening it, not re-reading. Anthropic's own guidance targets under 200 lines per CLAUDE.md file, longer files consume more context and measurably reduce adherence.

@@ -2,9 +2,14 @@
 
 Public, machine-agnostic Claude Code skills anyone can install, no dependency on any private repo or personal setup.
 
-A "skill" here is just a folder with a `SKILL.md` file inside it, plain markdown instructions that tell Claude Code how to run a specific workflow. No code, no build step. `SKILL.md` with trigger-phrase auto-invocation is a Claude Code mechanism specifically, Cursor doesn't scan `.claude/skills/` or fire skills off trigger phrases.
+A "skill" here is just a folder with a `SKILL.md` file inside it, plain markdown instructions that tell Claude how to run a specific workflow. No code, no build step. The install method in this README (dropping the folder into `.claude/skills/`) is Claude Code's local, filesystem-based discovery, Cursor doesn't scan that folder or fire skills off trigger phrases. Claude.ai and Cowork have a separate, account-level way to install skills instead: Settings > Customize > Skills > Add > Upload a skill (zip the folder first). Skills themselves work identically across Claude Code, Claude.ai chat, and Cowork once installed either way, the two install paths just target different surfaces.
 
 That said, `project-init` and `handoff` also write and maintain files Cursor reads natively (`.cursor/rules/context-router.md`, `CLAUDE.md`, `docs/WORKLOG.md`), so once either has run once (in Claude Code), Cursor picks up the same project conventions and worklog automatically. `drift-check` has no Cursor-side output, it's Claude Code only.
+
+**Where these three skills are actually useful, regardless of install path:** all three depend on real file access and git, not just on the skill instructions being present.
+- **Claude.ai chat** has no file access at all, so none of these three skills can do anything there even if uploaded, there's nothing for them to read or write.
+- **Cowork** has file access once you connect a folder, so `project-init` and `handoff` could genuinely work there. `drift-check` is the exception: its core mechanism depends on a global `CLAUDE.md` auto-loading every session the way Claude Code does, and Cowork doesn't do that automatically, so its premise doesn't hold up there even with a folder connected.
+- **Claude Code** (the CLI, and the Code tab in the Claude desktop app, which share `CLAUDE.md` and local skill discovery identically) is where all three are designed to run and have been validated.
 
 ## Contents
 

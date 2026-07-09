@@ -17,6 +17,12 @@ In **Recent session notes**, write **Shipped** as facts the next agent needs (co
 
 ## PROTOCOL (run in this exact order)
 
+### 0. Early exit for no-op sessions
+
+If a terminal is available and the project is a git repo (`.git` exists), run `git status --porcelain`. An empty result, with no files created or edited this session (including in prior `handoff` runs earlier in the same session), means skip straight to Step 13 with a lightweight report: state that nothing changed this session, and mark every checklist line as no changes/already up to date. Otherwise continue from Step 1.
+
+If no terminal is available, or the project isn't a git repo, `git status` can't answer this, judge by session content alone instead: no files created or edited this session means the same early exit applies.
+
 ### 1. Detect bootstrap gaps and route to project-init when needed
 Check whether baseline scaffolding is missing:
 - `CLAUDE.md`
@@ -59,8 +65,11 @@ Get today's real date before writing, run `date +%F` (or otherwise confirm the a
 Follow the template and ordering rules in that section:
 - Format: `YYYY-MM-DD | Shipped: ... | Next: ... | Blockers: ...` (omit Blockers if none)
 - Newest entry stays at the top
-- If your update overlaps the latest entry, edit that line instead of appending a near-duplicate
+- **Same-day entries are separate by default.** Multiple distinct changes on the same date get their own entries (same date repeated is fine), don't merge unrelated topics into one line just because they share a date. Only edit the latest entry in place when it's a true near-duplicate, the same unfinished topic continuing (e.g. two consecutive `handoff` runs before the work is done), not merely the same day.
 - Write Shipped as facts, not narration
+- **Shipped is a semicolon-separated list of short clauses, not prose paragraphs.** Each clause is a fact: what changed, a file/path, a behavior, or a commit hash, not a multi-sentence explanation.
+- **No time-of-day sub-narration.** Don't split one day's work into "LATER SAME DAY" / "EVENING" / "LATE EVENING" sections. Describe the end state and what changed, not the sequence of how it got there.
+- **Soft length guardrail:** if a drafted Shipped field runs past roughly 500 characters, cut iteration detail first (approaches tried and abandoned within the session) and keep final behavior, paths touched, and any commit hash. The worklog is next-session context, not a project diary.
 - If something from this session is being logged as a PROJECT.md decision (Step 6), reference it in one clause instead of restating its rationale, the worklog carries what happened, PROJECT.md carries why
 
 ### 6. Update spec and decision content
@@ -91,6 +100,8 @@ For each proposed change, show it in this format before writing:
 If nothing qualifies, say "No spec or decision updates needed" and move on.
 
 Wait for confirmation before writing. If the user approves, apply all at once. Use today's date on new decision entries.
+
+**Decision log archiving:** if the decision log already has 15 entries, archive the oldest to `docs/archive/decisions-YYYY.md` (year of the archived entries) before adding a new one, mirroring the worklog's archive-at-10 rule. Also archive any entry already marked superseded, regardless of count, once a newer decision replaces it. Do this before writing so the live log never exceeds 15 non-superseded entries.
 
 **Escalation:** if the "What this is" and "Key decisions" sections in `CLAUDE.md` exceed roughly a screen of content, propose moving them to `docs/PROJECT.md` (spec section + decision log section), leaving a one-line pointer in `CLAUDE.md`. Apply only with user confirmation, and note the move in the completion checklist.
 

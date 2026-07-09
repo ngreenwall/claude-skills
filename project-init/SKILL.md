@@ -72,7 +72,7 @@ Prefer patching existing files over replacing them.
 ### Step 3: Ask the git question
 Ask: "Will this live on git?" (Skip the question if the project root is already a git repo, treat that as a yes.)
 
-- **Yes:** run `git init` if not already a repo. If `.gitignore` does not exist, create one with sensible defaults for the detected stack (check for `package.json`, `requirements.txt`, `Gemfile`, etc.), at minimum `.DS_Store`, `.env`, `node_modules/` (if JS/TS), and editor/IDE cruft. Create an MIT `LICENSE` automatically (use a different license only if the user names one). No further git questions. Do not ask where the repo will be pushed or create a remote; after all scaffolding steps finish, make an initial commit (`Initial scaffold`) so the folder is push-ready, and the completion report's follow-up block covers connecting to GitHub later.
+- **Yes:** run `git init` if not already a repo. If `.gitignore` does not exist, create one with sensible defaults for the detected stack (check for `package.json`, `requirements.txt`, `Gemfile`, etc.), at minimum `.DS_Store`, `.env`, `CLAUDE.local.md`, `node_modules/` (if JS/TS), and editor/IDE cruft. Create an MIT `LICENSE` automatically (use a different license only if the user names one). No further git questions. Do not ask where the repo will be pushed or create a remote; after all scaffolding steps finish, make an initial commit (`Initial scaffold`) so the folder is push-ready, and the completion report's follow-up block covers connecting to GitHub later.
 - **No:** skip git, `.gitignore`, and `LICENSE`. Note in the report that `handoff`'s commit step won't apply until git is initialized.
 
 If `.gitignore` or `LICENSE` already exist, leave them untouched.
@@ -97,6 +97,8 @@ Check docs/WORKLOG.md for the current task list and recent session notes before 
 ```
 
 If `CLAUDE.md` exists, patch in the worklog check line and any missing section headers, don't rewrite existing content.
+
+If you want personal-only preferences on a shared project (sandbox URLs, personal shortcuts, anything you don't want committed), Claude Code also supports a `CLAUDE.local.md` file alongside `CLAUDE.md`, loaded the same way but meant to be gitignored. This skill doesn't create one automatically, just know it's there if you need it.
 
 If `docs/WORKLOG.md` is missing, create it:
 
