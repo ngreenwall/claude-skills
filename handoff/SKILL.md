@@ -15,6 +15,12 @@ Leave durable project context for the next chat. Do not paste a full conversatio
 
 In each **Session notes** entry, write **Shipped** as facts the next agent needs (code behavior, screens, paths, APIs), not narration about editing documentation or session housekeeping.
 
+## When to run this
+
+Not just end-of-task. Two triggers:
+- **Task done:** run handoff, then start a new session anytime after, context window usage doesn't matter.
+- **Context running high, task not done:** run handoff at a safe checkpoint (use the Next: field for what's left), then start a new session. Prefer this over `/compact`, handoff is a reviewed, explicit capture; `/compact` is an automatic, lossy summary and risks silent drift. Reserve `/compact` for a small amount of remaining work not worth a checkpoint.
+
 ## PROTOCOL (run in this exact order)
 
 ### 0. Early exit for no-op sessions
