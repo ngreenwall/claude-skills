@@ -68,7 +68,7 @@ Ensure the `docs/` folder exists.
 
 If `CLAUDE.md` is missing, create it using the template in `assets/claude-md-indepth.md` (fill in what you know from the conversation; leave honest placeholders otherwise). If `CLAUDE.md` exists, patch in the worklog check line and any missing section headers, don't rewrite existing content.
 
-If you want personal-only preferences on a shared project (sandbox URLs, personal shortcuts, anything you don't want committed), Claude Code also supports a `CLAUDE.local.md` file alongside `CLAUDE.md`, loaded the same way but meant to be gitignored. This skill doesn't create one automatically, just know it's there if you need it.
+Note: Claude Code also loads a gitignored `CLAUDE.local.md` for personal-only prefs; this skill doesn't create one automatically.
 
 If `docs/WORKLOG.md` is missing, create it using the template in `assets/worklog-template.md`.
 

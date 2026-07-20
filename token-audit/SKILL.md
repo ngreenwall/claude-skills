@@ -119,6 +119,8 @@ Output one finding per issue: category, all locations involved, recommended cons
 
 Merge across all agent outputs into one list. Sort high-weight items (template numbers 1-4, plus cross-file duplicate content) first, then medium-weight, each sorted by estimated impact within its tier. If both the single-file and cross-file agents flagged the same scoping issue (item 7), report it once, keep the cross-file version since it names all locations involved.
 
+On a full-library run (Mode B), suggest `/compact` here before Step 5, the raw agent transcripts are no longer needed once findings are compiled.
+
 ### Step 5: Library-mode, ask about unused skills
 
 List every skill in your skills directory and every slash command under `.claude/commands/` (name + one-line description) and ask the user directly which they've used. Anything not confirmed goes into the report as a removal candidate, listed separately from the subagent findings, not applied automatically.

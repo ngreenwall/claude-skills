@@ -13,8 +13,6 @@ description: >-
 
 Leave durable project context for the next chat. Do not paste a full conversation recap or duplicate what already lives in project context files (CLAUDE.md, AGENTS.md, README.md, etc.).
 
-In each **Session notes** entry, write **Shipped** as facts the next agent needs (code behavior, screens, paths, APIs), not narration about editing documentation or session housekeeping.
-
 ## When to run this
 
 Not just end-of-task. Two triggers:
@@ -59,7 +57,7 @@ Follow the template and ordering rules in that section:
 - Format: `YYYY-MM-DD | Shipped: ... | Next: ... | Blockers: ...` (omit Blockers if none)
 - Newest entry stays at the top
 - **Same-day entries are separate by default.** Multiple distinct changes on the same date get their own entries (same date repeated is fine), don't merge unrelated topics into one line just because they share a date. Only edit the latest entry in place when it's a true near-duplicate, the same unfinished topic continuing (e.g. two consecutive `handoff` runs before the work is done), not merely the same day.
-- Write Shipped as facts, not narration
+- Write Shipped as facts the next agent needs (code behavior, screens, paths, APIs), not narration about editing documentation or session housekeeping
 - **Shipped is a semicolon-separated list of short clauses, not prose paragraphs.** Each clause is a fact: what changed, a file/path, a behavior, or a commit hash, not a multi-sentence explanation.
 - **No time-of-day sub-narration.** Don't split one day's work into "LATER SAME DAY" / "EVENING" / "LATE EVENING" sections. Describe the end state and what changed, not the sequence of how it got there.
 - **Soft length guardrail:** if a drafted Shipped field runs past roughly 500 characters, cut iteration detail first (approaches tried and abandoned within the session) and keep final behavior, paths touched, and any commit hash. The worklog is next-session context, not a project diary.

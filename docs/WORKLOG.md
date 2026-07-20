@@ -2,14 +2,14 @@
 
 ## Now / Next
 <!-- Checklist. "Now" items first (1-3 max), then queued items. -->
-- [ ]
+- [ ] Review ~/my-ai-agent's token-audit pass (commit c05d345) against this repo's 5 skills for anything worth porting; started (drift-check, qa-audit, token-audit diffs reviewed), not finished
 
 ### Ideas
 <!-- Unscoped, someday. -->
 
 ## Session notes
 <!-- Newest entry at top. Format: YYYY-MM-DD | Shipped: ... | Next: ... | Blockers: ... -->
-2026-07-20 | Shipped: extended `qa-audit` and `token-audit` to recognize Claude Code slash command files (`.claude/commands/*.md`) as a target type; see CLAUDE.md decision log for scope. | Next: none pending from this session.
+2026-07-20 | Shipped: ran a full-library token-audit pass (8 Opus subagents) across all 5 skills, CLAUDE.md, and README.md; applied 3 safe cuts (qa-audit's frontmatter Do-NOT clauses collapsed; token-audit's Step 4 gained a `/compact` suggestion for library mode, matching qa-audit's existing pattern; project-init's `CLAUDE.local.md` aside trimmed from ~60 to ~20 words) plus 1 confirmed-uncertain fix (handoff's duplicate "Shipped" guidance at top-of-file folded into Step 5's own wording). Declined a proposed README/CLAUDE.md dedup after verifying the flagged duplicate didn't actually exist in README.md (false positive from the cross-file audit agent). | Next: review ~/my-ai-agent's own token-audit pass (commit c05d345) against this repo's skills for anything worth porting, in progress when this session ended.
 
 2026-07-13 | Shipped: Added a "When to run this" section to `handoff/SKILL.md`, clarifying it's not just end-of-task: also the right move at a safe checkpoint when context is running high mid-task (using the Next: field for remaining work), preferred over `/compact` since it's a reviewed capture rather than an automatic lossy summary. Ported from the equivalent change made to the private `~/my-ai-agent` handoff skill. README's existing "Use it" line already covered the long-session case, left as-is. | Next: none pending from this session.
 
@@ -27,5 +27,4 @@
 
 2026-07-09 | Shipped: README audited against current Anthropic/Cursor docs, several inaccuracies fixed: skill-upload path corrected to match support.claude.com (Customize > Skills > "+" > "+ Create skill" > "Upload a skill"); Claude.ai chat's file-access claim softened to no persistent project-folder access; Skill Overview reworded to note skills can bundle scripts; broken TOC anchor fixed for the install section; two markdown links unwrapped from backticks (example-global-CLAUDE.md, LICENSE); drift-check tagged Claude Code only in TOC/heading; redundant prose trimmed across sections; one-line quote summaries added under each skill heading; Skill Overview heading removed, its paragraph folded into the intro; user reformatted headings (removed `---` dividers, `24e0a42`); the `example-global-CLAUDE.md` link reverted to backtick-wrapped (non-clickable) during that edit and was fixed again, `3648aa8`. | Next: none pending from this session.
 
-2026-07-09 | Shipped: README corrected on skill availability (see CLAUDE.md decision log). drift-check: auto-memory scoping note; Check 3 compaction logic split by file scope; <200-line guidance cited; compact clean/failure output format. handoff: no-op early exit; same-day-entries rule; semicolon-clause Shipped style; no time-of-day narration; ~500-char guardrail; decision-log archiving at 15. project-init: `CLAUDE.local.md` pointer + `.gitignore` entry. Commit 44fa70a. | Next: none pending from this session.
 <!-- Archive to docs/archive/worklog-YYYY-MM.md when list exceeds 10 entries -->

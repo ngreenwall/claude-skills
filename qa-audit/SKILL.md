@@ -7,12 +7,9 @@ description: >-
   style violations, then proposes fixes for confirmation before applying. Use
   when the user says "QA this skill," "audit this file," "run a QA pass on X,"
   "QA SKILL.md," "audit CLAUDE.md," "QA this command," or "check this file for
-  consistency issues." Do NOT use for auditing whether global context loaded
-  correctly in the live session (use drift-check instead). Do NOT use for
-  running a skill against real prompts to grade its outputs (that's
-  skill-creator's eval feature, dynamic testing). Do NOT use for reviewing
-  code diffs (use /code-review instead); this skill never touches code, only
-  instruction/config prose.
+  consistency issues." Do NOT use for live-session drift (use drift-check),
+  skill output grading (skill-creator eval), or code diffs (/code-review);
+  this skill never touches code, only instruction/config prose.
 ---
 # SKILL: QA Audit
 
