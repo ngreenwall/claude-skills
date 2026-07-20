@@ -12,11 +12,7 @@ description: >-
 
 A deliberate, manual audit that confirms your **global** context file (the standing instructions Claude Code loads on every session, `~/.claude/CLAUDE.md`) is loaded and actually shaping behavior, and pinpoints where context dropped (top, middle, or bottom of the file). Long sessions and context compaction silently drop rules; this catches it. This skill is Claude Code only, it depends on that global file auto-loading every session, a mechanism other tools don't replicate the same way.
 
-This skill targets the global file specifically because that's usually the long, dense one, personal preferences, workflow habits, formatting rules, accumulated over time. That length is exactly what makes mid-file and end-of-file drift possible. A project-level `CLAUDE.md` is typically short (file-structure or workflow reminders) and gets re-read naturally each session, it doesn't carry the same depth-loss risk, so it's out of scope for this skill by default.
-
-If you ever notice yourself violating a project-specific rule mid-session (e.g. editing a file you were told not to touch), that's a signal you might want a lightweight check for that project file too, but don't set one up preemptively, only add it once you've actually seen it happen.
-
-This skill audits CLAUDE.md specifically, your own written instructions. It's a separate system from Claude Code's auto memory (`~/.claude/projects/<project>/memory/MEMORY.md`), notes Claude writes about itself as it works. Auto memory is out of scope here, there's nothing to audit for drift since Claude, not you, decides what goes in it.
+Targets your global context file only; project-level `CLAUDE.md` is typically short enough that drift is unlikely.
 
 Do NOT pre-read the context file before running the checks. The whole point is to test what is actually loaded in the current context window. Reproduce from memory, then you may verify against the file in step 1.
 
@@ -36,7 +32,7 @@ If you don't have a global context file yet and want one, create it yourself, th
 
 ## PROTOCOL
 
-Produce a short scorecard with all three checks below. Keep it tight.
+Produce a short scorecard with all three checks below, total output should fit in ~40 lines (see Output format for the expand-only-failures rule).
 
 ### Check 1, Proof of load + depth
 
@@ -55,9 +51,9 @@ After scoring from memory, read the context file and confirm the tokens match. F
 
 ### Check 2, Behavior audit
 
-Grade the last several assistant replies in this session against the context file's rules. One row per rule, ✅/❌, with a one-line verbatim evidence quote from a recent reply. If a drift-check already ran this session, grade only the replies since it; earlier violations were already reported and corrected.
+Grade the last few (roughly 3-5) assistant replies in this session against the context file's rules. One row per rule, ✅/❌, with a one-line verbatim evidence quote from a recent reply. If a drift-check already ran this session, grade only the replies since it; earlier violations were already reported and corrected.
 
-This check is self-assessment, so trust it less than Check 1. The same drift that corrupts output can corrupt this grading (a drifted model may rate itself ✅). Check 1 (canary recall) is the objective anchor. If Check 1 fails, distrust a clean Check 2. The model likely cannot grade itself reliably either.
+This check is self-assessment, so trust it less than Check 1. If Check 1 fails, distrust a clean Check 2, the same drift that corrupts output also corrupts self-grading.
 
 Audit in two passes:
 
@@ -97,9 +93,12 @@ Drift check: ✅ on-track  <!-- or ⚠ drifting -->
 `<total>` for the Behavior line is the count of rules actually graded (core + derived, excluding `n/a`). Compaction only expands past one line if it's flagging fallout, e.g. "Compaction: yes, treat any ❌ above as expected fallout."
 
 If drift is found, end with one plain-language sentence naming who acts and when, no shorthand tags, no jargon:
-- Behavior fix (Check 2): say "I'll self-correct this starting with my next reply, you don't need to do anything."
-- Load/file fix (Check 1): say "This needs your OK before I edit `<file>` to fix it."
-- Compaction fallout: say "Re-run this check whenever it's convenient, no rush."
+
+| Failing check | Say |
+|---|---|
+| Behavior (Check 2) | "I'll self-correct this starting with my next reply, you don't need to do anything." |
+| Load/file (Check 1) | "This needs your OK before I edit `<file>` to fix it." |
+| Compaction fallout | "Re-run this check whenever it's convenient, no rush." |
 
 If this check is confirming a fix from an earlier drift-check in the same session, say so in full sentences, e.g. "Last check flagged <rule>; every reply since then followed it, so that's resolved, nothing else needed from you." Don't reuse a tag or shorthand from the earlier check's output out of context, it won't carry meaning on its own.
 

@@ -15,10 +15,7 @@ description: >-
 
 A static-analysis QA pass over instruction and config prose. Recognized targets: `SKILL.md` files, `CLAUDE.md`, your global context file (the standing instructions your AI tool loads every session, e.g. `~/.claude/CLAUDE.md`), `README.md`, slash command files (`.claude/commands/*.md`), and other instruction/config prose files. It never executes or evaluates the target against real prompts, it reads it and reasons about it.
 
-This is NOT:
-- **drift-check**, that audits whether global context actually loaded and is being followed in a *live session*. This skill runs a static read of a file anytime, session state doesn't matter.
-- **skill-creator's eval feature**, that runs a skill against real prompts and grades its outputs, dynamic testing. This skill never executes the target.
-- **/code-review**, that's for code diffs. This skill never touches code, only instruction/config prose.
+See the frontmatter above for what this is NOT (drift-check, skill-creator's eval feature, /code-review). Closest neighbor: **token-audit** reduces load cost (rewrite/split/merge for token bloat); this skill checks correctness (contradictions, dead logic, unstated dependencies).
 
 ## PROTOCOL
 

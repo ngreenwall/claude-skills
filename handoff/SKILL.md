@@ -48,14 +48,12 @@ If an existing worklog is missing the **Now / Next** section (older layout), add
 Open `$WORKLOG_PATH` → the session notes section. Read the newest 1-2 dated entries for dedup context.
 
 ### 4. Archive if needed
-If adding the new entry would push the session list past 10 entries, archive just enough of the oldest entries to `docs/archive/worklog-YYYY-MM.md` to keep the list at or under 10 after adding the new one, typically just the single oldest entry. Do this before writing so the list never exceeds 10.
+If the session list already has 10 entries, apply the worklog archiving rule in `references/decision-log-maintenance.md` before writing.
 
 ### 5. Add or update one session entry
 Get today's real date before writing, run `date +%F` (or otherwise confirm the actual date). Do not guess or reuse a date from an older entry, some tools do not receive the current date automatically.
 
-Follow the template and ordering rules in that section:
-- Format: `YYYY-MM-DD | Shipped: ... | Next: ... | Blockers: ...` (omit Blockers if none)
-- Newest entry stays at the top
+Follow the entry format in `assets/worklog-template.md`. Ordering rules not in that template:
 - **Same-day entries are separate by default.** Multiple distinct changes on the same date get their own entries (same date repeated is fine), don't merge unrelated topics into one line just because they share a date. Only edit the latest entry in place when it's a true near-duplicate, the same unfinished topic continuing (e.g. two consecutive `handoff` runs before the work is done), not merely the same day.
 - Write Shipped as facts the next agent needs (code behavior, screens, paths, APIs), not narration about editing documentation or session housekeeping
 - **Shipped is a semicolon-separated list of short clauses, not prose paragraphs.** Each clause is a fact: what changed, a file/path, a behavior, or a commit hash, not a multi-sentence explanation.
@@ -83,11 +81,9 @@ Review the session for anything that should be added or changed in whichever loc
 - An alternative was explicitly ruled out
 - A previous decision was reversed or updated
 
-**Correcting an existing entry:** when a past decision turns out to be wrong or incomplete, don't append a second "(Correction, ...)" onto an entry that already has one. Instead, mark the original entry superseded (e.g. `Superseded by [YYYY-MM-DD entry below].`) and write a fresh entry stating the current understanding as one coherent fact. This keeps each entry scannable and means the outdated one archives out immediately under the rule below, rather than accumulating corrections indefinitely.
+**Decision log ordering:** newest entry at top, same as the worklog, new decisions get added above older ones.
 
-**Ordering:** new decision entries append at the bottom (oldest-first), unlike the worklog's newest-at-top ordering, that's what makes "Superseded by [YYYY-MM-DD entry below]" accurate.
-
-**Decision log archiving:** if the decision log already has 15 entries, archive the oldest to `docs/archive/decisions-YYYY.md` (year of the archived entries) before adding a new one, mirroring the worklog's archive-at-10 rule. Also archive any entry already marked superseded, regardless of count, once a newer decision replaces it. The live log should never exceed 15 non-superseded entries.
+For corrections and archiving rules, see `references/decision-log-maintenance.md`.
 
 For each proposed change, show it in this format before writing, including any archive move (which file it's moving to and what's being removed from the live log) as one of the proposed changes, not something applied silently after confirmation:
 
@@ -96,9 +92,9 @@ For each proposed change, show it in this format before writing, including any a
 
 If nothing qualifies, say "No spec or decision updates needed" and move on.
 
-Wait for confirmation before writing. If the user approves, apply all at once. Use today's date on new decision entries.
+Wait for confirmation before writing. If the user approves, apply all at once, archiving before adding the new entry so the live log never exceeds 15 non-superseded entries. Use today's date on new decision entries.
 
-**Escalation:** if the "What this is" and "Key decisions" sections in `CLAUDE.md` exceed roughly a screen of content, propose moving them to `docs/PROJECT.md` (spec section + decision log section), leaving a one-line pointer in `CLAUDE.md`. Apply only with user confirmation, and note the move in the completion checklist.
+If CLAUDE.md's spec/decision sections have grown large, see the escalation rule in `references/decision-log-maintenance.md`.
 
 ### 7. Update the task checklist
 
@@ -171,6 +167,8 @@ Handoff checklist:
 Manual follow-up:
 - <only include items that still need user action>
 ```
+
+Session state is committed; safe to `/clear` or open a new thread.
 
 ## Tool-specific notes
 

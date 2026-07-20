@@ -128,12 +128,6 @@ Manual follow-up:
 - <only include items that still need user action>
 ```
 
-## ESCALATION PATH (when a project outgrows the defaults)
-Not part of day-0 init. Apply later, during handoff or when the user asks:
-1. When the "What this is" and "Key decisions" sections outgrow CLAUDE.md (roughly a screen of content), move them to a single `docs/PROJECT.md` (spec section + decision log section) and leave a pointer line in CLAUDE.md.
-2. That's the last tier, do not split PROJECT.md into separate SPEC/DECISIONS files.
-3. The task checklist always stays in `docs/WORKLOG.md`, never split it into a separate ROADMAP.md.
-
 ## DEFAULTS AND GUARDRAILS
 - Never guess scope, always ask (Step 1). Folder contents are not a reliable signal for how deep a project will go.
 - Both scopes ask the git question once; a yes covers `.gitignore` and MIT `LICENSE` automatically, a no skips all three. Never create a remote at scaffold time.
@@ -150,5 +144,5 @@ Not part of day-0 init. Apply later, during handoff or when the user asks:
 
 ## BOUNDARY
 - `project-init` is for one-time bootstrap or repairing missing scaffolding.
-- `handoff` is for recurring session updates (session notes, Now/Next checklist, README health check, durable doc deltas) and owns the CLAUDE.md-to-PROJECT.md escalation.
+- `handoff` is for recurring session updates (session notes, Now/Next checklist, README health check, durable doc deltas) and owns the escalation when CLAUDE.md's "What this is"/"Key decisions" sections outgrow a screen of content and move to `docs/PROJECT.md` (the last tier, never split further; the task checklist always stays in `docs/WORKLOG.md`, never a separate ROADMAP.md). Not part of day-0 init.
 - Do not move recurring handoff logging into `project-init`.
