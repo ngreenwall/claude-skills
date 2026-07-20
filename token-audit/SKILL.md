@@ -2,16 +2,17 @@
 name: token-audit
 description: >-
   Audits instruction/config files (SKILL.md, CLAUDE.md, your global context
-  file) and this repo's skill architecture for token bloat, then proposes
-  fixes: rewrite, split, merge, add navigation, or remove. Use when the user
-  says "audit tokens," "check token bloat," "shrink this file," "audit the
-  skills library," "is this skill too big," or "cut context cost." Do NOT use
-  for finding bugs, contradictions, or dead logic (use qa-audit for that). Do
-  NOT use for code files, only instruction/config prose and skill structure.
+  file, slash command files) and this repo's skill architecture for token
+  bloat, then proposes fixes: rewrite, split, merge, add navigation, or
+  remove. Use when the user says "audit tokens," "check token bloat," "shrink
+  this file," "audit the skills library," "is this skill too big," or "cut
+  context cost." Do NOT use for finding bugs, contradictions, or dead logic
+  (use qa-audit for that). Do NOT use for code files, only instruction/config
+  prose and skill structure.
 ---
 # SKILL: Token Audit
 
-A token-bloat audit over instruction and config prose and this repo's skill architecture. Recognized targets: `SKILL.md` files, `CLAUDE.md`, your global context file (the standing instructions your AI tool loads every session, e.g. `~/.claude/CLAUDE.md`), `README.md`, and other instruction/config prose files.
+A token-bloat audit over instruction and config prose and this repo's skill architecture. Recognized targets: `SKILL.md` files, `CLAUDE.md`, your global context file (the standing instructions your AI tool loads every session, e.g. `~/.claude/CLAUDE.md`), `README.md`, slash command files (`.claude/commands/*.md`), and other instruction/config prose files.
 
 This is NOT:
 - **qa-audit**, that reports bug-shaped findings to fix. This skill proposes token-reduction actions (rewrite, split, merge, add nav, remove) instead, a different output shape.
@@ -62,7 +63,7 @@ Identify the file(s) and mode (see Modes above).
 
 Before anything else, check whether the target looks like code: it's a code file if the extension isn't `.md`/`.mdc`. If so, stop immediately, don't spawn any agent, and tell the user in one line: "That's a code file, not instruction/config prose, use /code-review for that."
 
-If the extension is `.md`/`.mdc` but the path isn't one of the recognized instruction/config locations (a `SKILL.md` inside a skills folder, `CLAUDE.md`, your global context file, `README.md`), ask the user to confirm it's instruction/config prose before proceeding.
+If the extension is `.md`/`.mdc` but the path isn't one of the recognized instruction/config locations (a `SKILL.md` inside a skills folder, `CLAUDE.md`, your global context file, `README.md`, `.claude/commands/*.md`), ask the user to confirm it's instruction/config prose before proceeding.
 
 If the file is managed by a sync tool that generates copies elsewhere (e.g. a tool that regenerates `.claude/` or `.cursor/` files from a single source of truth), always resolve to that source file, never a generated copy. Skip this check if you don't use such a tool, most projects edit `SKILL.md`/`CLAUDE.md` directly.
 
@@ -120,7 +121,7 @@ Merge across all agent outputs into one list. Sort high-weight items (template n
 
 ### Step 5: Library-mode, ask about unused skills
 
-List every skill in your skills directory (name + one-line description) and ask the user directly which they've used. Anything not confirmed goes into the report as a removal candidate, listed separately from the subagent findings, not applied automatically.
+List every skill in your skills directory and every slash command under `.claude/commands/` (name + one-line description) and ask the user directly which they've used. Anything not confirmed goes into the report as a removal candidate, listed separately from the subagent findings, not applied automatically.
 
 ### Step 6: Propose fixes, wait for confirmation
 

@@ -2,20 +2,21 @@
 name: qa-audit
 description: >-
   Static-analysis QA pass over instruction/config files (SKILL.md, CLAUDE.md,
-  your global context file), not code. Spawns an Opus subagent per file to
-  check for contradictions, dead logic, unstated dependencies, and style
-  violations, then proposes fixes for confirmation before applying. Use when
-  the user says "QA this skill," "audit this file," "run a QA pass on X," "QA
-  SKILL.md," "audit CLAUDE.md," or "check this file for consistency issues."
-  Do NOT use for auditing whether global context loaded correctly in the live
-  session (use drift-check instead). Do NOT use for running a skill against
-  real prompts to grade its outputs (that's skill-creator's eval feature,
-  dynamic testing). Do NOT use for reviewing code diffs (use /code-review
-  instead); this skill never touches code, only instruction/config prose.
+  your global context file, command files), not code. Spawns an Opus subagent
+  per file to check for contradictions, dead logic, unstated dependencies, and
+  style violations, then proposes fixes for confirmation before applying. Use
+  when the user says "QA this skill," "audit this file," "run a QA pass on X,"
+  "QA SKILL.md," "audit CLAUDE.md," "QA this command," or "check this file for
+  consistency issues." Do NOT use for auditing whether global context loaded
+  correctly in the live session (use drift-check instead). Do NOT use for
+  running a skill against real prompts to grade its outputs (that's
+  skill-creator's eval feature, dynamic testing). Do NOT use for reviewing
+  code diffs (use /code-review instead); this skill never touches code, only
+  instruction/config prose.
 ---
 # SKILL: QA Audit
 
-A static-analysis QA pass over instruction and config prose. Recognized targets: `SKILL.md` files, `CLAUDE.md`, your global context file (the standing instructions your AI tool loads every session, e.g. `~/.claude/CLAUDE.md`), `README.md`, and other instruction/config prose files. It never executes or evaluates the target against real prompts, it reads it and reasons about it.
+A static-analysis QA pass over instruction and config prose. Recognized targets: `SKILL.md` files, `CLAUDE.md`, your global context file (the standing instructions your AI tool loads every session, e.g. `~/.claude/CLAUDE.md`), `README.md`, slash command files (`.claude/commands/*.md`), and other instruction/config prose files. It never executes or evaluates the target against real prompts, it reads it and reasons about it.
 
 This is NOT:
 - **drift-check**, that audits whether global context actually loaded and is being followed in a *live session*. This skill runs a static read of a file anytime, session state doesn't matter.
@@ -30,7 +31,7 @@ Identify the file(s) to QA.
 
 Before doing anything else, check whether the target looks like code: it's a code file if the extension isn't `.md`/`.mdc` (e.g. `.ts`, `.py`, `.js`). If so, stop immediately, don't spawn any agent, and tell the user in one line: "That's a code file, not instruction/config prose, use /code-review for that."
 
-If the extension is `.md`/`.mdc` but the path isn't one of the recognized instruction/config locations (a `SKILL.md` inside a skills folder, `CLAUDE.md`, your global context file, `README.md`), don't auto-reject it, ask the user to confirm it's instruction/config prose before proceeding.
+If the extension is `.md`/`.mdc` but the path isn't one of the recognized instruction/config locations (a `SKILL.md` inside a skills folder, `CLAUDE.md`, your global context file, `README.md`, `.claude/commands/*.md`), don't auto-reject it, ask the user to confirm it's instruction/config prose before proceeding.
 
 If the file is managed by a sync tool that generates copies elsewhere (e.g. a tool that regenerates `.claude/` or `.cursor/` files from a single source of truth), always resolve to that source file, never a generated copy, editing a generated copy gets silently overwritten on the next sync run. Skip this check if you don't use such a tool, most projects edit `SKILL.md`/`CLAUDE.md` directly.
 
@@ -62,10 +63,16 @@ Read [related docs, e.g. README, decision log] for context so deliberate, docume
 Output one finding per issue: location, quoted text, why it's a problem, proposed fix. Don't apply fixes, just report. Keep each finding to 2-3 sentences, no preamble or restated reasoning. Rank by likelihood of causing real bad behavior vs. just reading oddly. End with a summary count by severity.
 ```
 
-If the target carries YAML frontmatter (any `SKILL.md`, or a global/rule source file), append this 6th check item to the prompt:
-```
-6. Frontmatter/convention violations: kebab-case name (for skills), pushy description with named trigger phrases, negative triggers present if the skill is narrow or heavy, all required frontmatter fields present (name, description).
-```
+If the target carries YAML frontmatter, append a 6th check item to the prompt, using the checklist for its file type:
+
+- **`SKILL.md`, or a global/rule source file:**
+  ```
+  6. Frontmatter/convention violations: kebab-case name (for skills), pushy description with named trigger phrases, negative triggers present if the skill is narrow or heavy, all required frontmatter fields present (name, description).
+  ```
+- **`.claude/commands/*.md`:**
+  ```
+  6. Frontmatter/convention violations: no `name` field expected (commands don't use one, don't flag it as missing), description is one sentence describing what the command does, all required fields present.
+  ```
 
 ### Step 4: Compile findings
 
