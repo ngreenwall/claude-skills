@@ -63,6 +63,8 @@ To install a skill: Customize > Skills > "+" > "+ Create skill" > "Upload a skil
 
 Asks two questions: simple or in-depth project? Will it live on git? Then creates only what that scope needs, `.gitignore` + MIT `LICENSE` if git, plus `README.md`, `CLAUDE.md`, and a Cursor context router. In-depth projects also get `docs/WORKLOG.md` for a task checklist and session notes.
 
+`.cursor/rules/context-router.md` tells Cursor to read `CLAUDE.md` (and `docs/WORKLOG.md` for in-depth projects) at the start of every session, that's what makes the same file work for both tools.
+
 - **Use it:** first thing in a brand-new repo, before your first `handoff`.
 - **Don't use it:** for end-of-session updates in a repo that's already set up, that's `handoff`.
 
