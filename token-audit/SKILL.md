@@ -75,6 +75,8 @@ If the extension is `.md`/`.mdc` but the path isn't one of the recognized instru
 
 If the file is managed by a sync tool that generates copies elsewhere (e.g. a tool that regenerates `.claude/` or `.cursor/` files from a single source of truth), always resolve to that source file, never a generated copy. Skip this check if you don't use such a tool, most projects edit `SKILL.md`/`CLAUDE.md` directly.
 
+**Skip check (Mode A only):** if the target is under ~100 lines and a quick read shows no obvious bloat (headers/nav present, no repeated content, no wall-of-prose section), skip spawning the audit agent and report "already lean, no findings" instead of running the full checklist. Mode B always runs the full pass per file, this shortcut is single-file only.
+
 ### Step 2: Gather context
 
 Read related docs (README, decision log, sibling skills) so the subagent doesn't flag deliberate, documented choices (repeated canary tokens, intentional emphasis, required verbatim command blocks) as bloat.
@@ -128,6 +130,8 @@ Output one finding per issue: category, all locations involved, recommended cons
 Merge across all agent outputs into one list. Sort high-weight items (template numbers 1-4, plus cross-file duplicate content) first, then medium-weight, each sorted by estimated impact within its tier. If both the single-file and cross-file agents flagged the same scoping issue (item 7), report it once, keep the cross-file version since it names all locations involved.
 
 On a full-library run (Mode B), suggest `/compact` here before Step 5, the raw agent transcripts are no longer needed once findings are compiled.
+
+**Report format cap:** one line per finding (issue + proposed fix), no restated subagent reasoning. On Mode B, show the top 15 findings by impact in full and summarize the rest as a count by tier (e.g. "12 more medium-weight findings, same categories").
 
 ### Step 5: Library-mode, ask about unused skills
 
