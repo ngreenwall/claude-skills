@@ -14,5 +14,5 @@ Used in Step 2 when `docs/WORKLOG.md` does not exist yet.
 
 ## Session notes
 <!-- Newest entry at top. Format: YYYY-MM-DD | Shipped: ... | Next: ... | Blockers: ... -->
-<!-- Archive to docs/archive/worklog-YYYY-MM.md once the list reaches 10 entries -->
+<!-- Archive to docs/archive/worklog-YYYY-MM.md once the list reaches 6 entries -->
 ```

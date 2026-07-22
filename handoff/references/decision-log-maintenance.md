@@ -1,10 +1,10 @@
 # Decision log and worklog maintenance
 
-Loaded only when one of these rare conditions actually fires during Step 4 (worklog) or Step 6 (spec/decisions). The common path (add one worklog entry, no corrections, log under 10/15 entries) doesn't need this file.
+Loaded only when one of these rare conditions actually fires during Step 4 (worklog) or Step 6 (spec/decisions). The common path (add one worklog entry, no corrections, log under 6/8 entries) doesn't need this file.
 
 ## Worklog archiving (Step 4)
 
-If adding the new entry would push the session list past 10 entries, archive just enough of the oldest entries to `docs/archive/worklog-YYYY-MM.md` to keep the list at or under 10 after adding the new one, typically just the single oldest entry. Do this before writing so the list never exceeds 10.
+If adding the new entry would push the session list past 6 entries, archive just enough of the oldest entries to `docs/archive/worklog-YYYY-MM.md` to keep the list at or under 6 after adding the new one, typically just the single oldest entry. Do this before writing so the list never exceeds 6.
 
 **Ordering:** `docs/archive/worklog-YYYY-MM.md` files use newest-at-top, matching the live worklog. Insert newly archived entries at the top of the archive file, in the same newest-to-oldest order they appeared in the live worklog.
 
@@ -14,7 +14,7 @@ When a past decision turns out to be wrong or incomplete, don't append a second 
 
 ## Decision log archiving (Step 6)
 
-If the decision log already has 15 entries, archive the oldest to `docs/archive/decisions-YYYY.md` (year of the archived entries) before adding a new one, mirroring the worklog's archive-at-10 rule. Also archive any entry already marked superseded, regardless of count, once a newer decision replaces it. The live log should never exceed 15 non-superseded entries. Include archive moves in the proposed-changes list for confirmation, not as a silent follow-up.
+If the decision log already has 8 entries, archive the oldest to `docs/archive/decisions-YYYY.md` (year of the archived entries) before adding a new one, mirroring the worklog's archive-at-6 rule. Also archive any entry already marked superseded, regardless of count, once a newer decision replaces it. The live log should never exceed 8 non-superseded entries. Include archive moves in the proposed-changes list for confirmation, not as a silent follow-up.
 
 **Ordering:** `docs/archive/decisions-YYYY.md` files use newest-at-top, matching the live decision log. Insert newly archived entries at the top of the archive file, in the same newest-to-oldest order they appeared in the live log.
 

@@ -5,8 +5,9 @@ description: >-
   file, slash command files) and this repo's skill architecture for token
   bloat, then proposes fixes: rewrite, split, merge, add navigation, or
   remove. Use when the user says "audit tokens," "check token bloat," "shrink
-  this file," "audit the skills library," "is this skill too big," or "cut
-  context cost." Do NOT use for finding bugs, contradictions, or dead logic
+  this file," "audit the skills library," "is this skill too big," "cut
+  context cost," "check for updated Anthropic guidance," or "refresh the
+  checklist." Do NOT use for finding bugs, contradictions, or dead logic
   (use qa-audit for that). Do NOT use for code files, only instruction/config
   prose and skill structure.
 ---
@@ -18,12 +19,15 @@ This is NOT:
 - **qa-audit**, that reports bug-shaped findings to fix. This skill proposes token-reduction actions (rewrite, split, merge, add nav, remove) instead, a different output shape.
 - **drift-check**, that verifies global context actually loaded and is being followed in a *live session*. This skill is a static audit, session state doesn't matter.
 - A code minifier. This skill never touches code, only instruction/config prose and skill structure.
+- A fix for `docs/WORKLOG.md` or `docs/PROJECT.md` bloat. Those are logs governed by `handoff`'s own per-entry length caps and archive thresholds, not this checklist.
 
 ## Modes
 
 **Mode A - single file (default).** One file given, run the single-file checklist only.
 
 **Mode B - full library.** Explicitly requested (e.g. "audit the whole skills library"). Runs the single-file checklist across every file, plus the cross-file checklist and the unused-skills question. This is the expensive path, only run when asked.
+
+**Mode C - refresh guidance.** Explicitly requested (e.g. "check for updated Anthropic guidance," "refresh the checklist"). Requires WebFetch; if it's unavailable in this environment (e.g. blocked by org policy), tell the user and stop rather than proceeding without it. WebFetch these Anthropic doc pages: `https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview` and `https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents`. Compare their current guidance against the Checklist section below, then propose specific additions/edits/removals to the Checklist for confirmation, same before/after format as Step 6. This mode only edits this skill file, never a target file. Skip prompt-caching guidance, already out of scope (see "Dropped, not checked" below).
 
 If the request doesn't make the mode clear, ask before proceeding.
 
@@ -60,6 +64,10 @@ Unused or rarely-triggered skills: no usage telemetry exists in this repo, so as
 ### Step 1: Resolve target(s) and mode, guard against code
 
 Identify the file(s) and mode (see Modes above).
+
+**Bare invocation (no file named, mode unclear):** check the current directory for anything to audit first, don't default to asking an open-ended question.
+- If `SKILL.md` files, `CLAUDE.md`, or a global context file exist here: present a 3-option menu (single file / full library / refresh guidance) instead of free-text back-and-forth.
+- If none of those exist: there's nothing for Mode A or B to point at. Skip the menu, tell the user in one line ("No instruction/config files found here, offering a guidance refresh instead"), and go straight to Mode C.
 
 Before anything else, check whether the target looks like code: it's a code file if the extension isn't `.md`/`.mdc`. If so, stop immediately, don't spawn any agent, and tell the user in one line: "That's a code file, not instruction/config prose, use /code-review for that."
 

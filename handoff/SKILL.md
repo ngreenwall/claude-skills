@@ -48,7 +48,7 @@ If an existing worklog is missing the **Now / Next** section (older layout), add
 Open `$WORKLOG_PATH` → the session notes section. Read the newest 1-2 dated entries for dedup context.
 
 ### 4. Archive if needed
-If the session list already has 10 entries, apply the worklog archiving rule in `references/decision-log-maintenance.md` before writing.
+If the session list already has 6 entries, apply the worklog archiving rule in `references/decision-log-maintenance.md` before writing.
 
 ### 5. Add or update one session entry
 Get today's real date before writing, run `date +%F` (or otherwise confirm the actual date). Do not guess or reuse a date from an older entry, some tools do not receive the current date automatically.
@@ -58,7 +58,7 @@ Follow the entry format in `assets/worklog-template.md`. Ordering rules not in t
 - Write Shipped as facts the next agent needs (code behavior, screens, paths, APIs), not narration about editing documentation or session housekeeping
 - **Shipped is a semicolon-separated list of short clauses, not prose paragraphs.** Each clause is a fact: what changed, a file/path, a behavior, or a commit hash, not a multi-sentence explanation.
 - **No time-of-day sub-narration.** Don't split one day's work into "LATER SAME DAY" / "EVENING" / "LATE EVENING" sections. Describe the end state and what changed, not the sequence of how it got there.
-- **Soft length guardrail:** if a drafted Shipped field runs past roughly 500 characters, cut iteration detail first (approaches tried and abandoned within the session) and keep final behavior, paths touched, and any commit hash. The worklog is next-session context, not a project diary.
+- **Length check (enforced):** after drafting Shipped, count its characters. If over 500, cut iteration detail (retries, false starts, exact tool names, restated rationale) first, keep final behavior, paths, and any commit hash, then redraft and recount until under 500. Don't skip this because the draft reads fine.
 - If something from this session is being logged as a PROJECT.md decision (Step 6), reference it in one clause instead of restating its rationale, the worklog carries what happened, PROJECT.md carries why
 
 ### 6. Update spec and decision content
@@ -90,6 +90,8 @@ For each proposed change, show it in this format before writing, including any a
 > **[file path]** Action (add|update|remove|archive): proposed content
 > *Why:* one-line rationale
 
+**Length check (enforced, decision entries only):** count the proposed content's characters. If over 800, cut restated history/prior-attempt narrative first, keep the decision and its actual rationale, then redraft and recount until under 800.
+
 If nothing qualifies, say "No spec or decision updates needed" and move on.
 
 Wait for confirmation before writing. If the user approves, apply all at once, archiving before adding the new entry so the live log never exceeds 15 non-superseded entries. Use today's date on new decision entries.
@@ -108,7 +110,9 @@ Open the **Now / Next** section at the top of `$WORKLOG_PATH` (Step 2 guarantees
 ### 8. README health check
 (If terminal access is unavailable, use read/list file tools instead of shell commands for this step and Step 9.)
 
-The README should give any agent (or human) enough to pick up the project cold. Check for and update these sections:
+**Relevance check (do this first):** did this session add/remove/rename a top-level file or directory, change install/run/test commands, or touch env vars/config needed to run the project? If none of these happened, skip the directory listing and section review below, say "No structural changes this session, README not re-checked," and move to Step 9.
+
+Otherwise, the README should give any agent (or human) enough to pick up the project cold. Check for and update these sections:
 
 - **What this is:** one paragraph on what the project does and why it exists
 - **How to run it:** exact commands to install dependencies and start the project locally
@@ -131,6 +135,10 @@ Then verify a Cursor context router rule exists at `.cursor/rules/context-router
 Then update CLAUDE.md, AGENTS.md, or other context files only when something else durable changed this session, new conventions, removed patterns, renamed paths. Do not update these for session housekeeping or doc edits. If nothing else applies, say "No additional doc updates needed."
 
 Before adding any convention to CLAUDE.md, check it is not already present and skip if it is. This keeps the write idempotent so a duplicate cannot appear if a separate context-update pass already logged the same thing.
+
+**Bloat check:** if CLAUDE.md (or AGENTS.md) is now over ~200 lines, flag it in the completion checklist's Manual follow-up and suggest running `token-audit` on it. Don't run token-audit automatically, it's a separate confirmed workflow.
+
+If context is running long, suggest `/compact` before continuing to Steps 10-13 (the remaining steps are mechanical, run them at low reasoning effort).
 
 ### 10. Noise check
 Search `$WORKLOG_PATH` for vague language. Substitute the resolved path for `$WORKLOG_PATH` in the command below, it is a placeholder, not a real shell variable, so the literal command will not work unexpanded (e.g. use `docs/WORKLOG.md`):

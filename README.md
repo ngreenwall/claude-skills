@@ -59,17 +59,46 @@ To install a skill: Customize > Skills > "+" > "+ Create skill" > "Upload a skil
 
 ### [project-init](project-init/SKILL.md)
 
-> One-time setup that gives a brand-new repo its starting docs and files.
+> One-time setup that gives a brand-new repo its starting docs and files. Works in Cursor too.
 
 Asks two questions: simple or in-depth project? Will it live on git? Then creates only what that scope needs, `.gitignore` + MIT `LICENSE` if git, plus `README.md`, `CLAUDE.md`, and a Cursor context router. In-depth projects also get `docs/WORKLOG.md` for a task checklist and session notes.
 
 - **Use it:** first thing in a brand-new repo, before your first `handoff`.
 - **Don't use it:** for end-of-session updates in a repo that's already set up, that's `handoff`.
 
+What it creates, simple project (git yes):
+
+```
+your-project/
+├── .gitignore
+├── LICENSE
+├── README.md
+├── CLAUDE.md
+└── .cursor/
+    └── rules/
+        └── context-router.md
+```
+
+What it creates, in-depth build (git yes):
+
+```
+your-project/
+├── .gitignore
+├── LICENSE
+├── README.md
+├── CLAUDE.md
+├── docs/
+│   └── WORKLOG.md
+└── .cursor/
+    └── rules/
+        └── context-router.md
+```
+
+Skip the git question with "no" and `.gitignore`/`LICENSE` are left out. `.cursor/rules/` is created either way, it's just a router file that's harmless if you don't use Cursor.
 
 ### [handoff](handoff/SKILL.md)
 
-> End-of-session wrap-up that logs progress and commits your work.
+> End-of-session wrap-up that logs progress and commits your work. Works in Cursor too.
 
 Logs one dated session entry (`Shipped` / `Next` / `Blockers`) in `docs/WORKLOG.md`, trims the Now/Next task checklist, checks the README is still accurate, and commits (pushes if a remote exists). Creates `docs/WORKLOG.md` if it doesn't exist yet. If there's meaningful carryover, it also writes a one-paragraph starter prompt you can paste into your next chat, skipped when there's nothing worth carrying over.
 
