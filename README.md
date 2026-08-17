@@ -12,7 +12,7 @@ my-skill/
 ├── assets/        # templates, resources
 ```
 
-None of the five skills here use `scripts/` or `references/`, no code, no build step. `handoff` and `project-init` each ship an `assets/` folder with starter templates (worklog, CLAUDE.md, Cursor context-router content) that `SKILL.md` loads on demand instead of inlining.
+None of these skills use `scripts/`, no code, no build step. `handoff` and `project-init` each ship an `assets/` folder with starter templates (worklog, CLAUDE.md, Cursor context-router content) that `SKILL.md` loads on demand instead of inlining. `model-alignment-audit` ships a `references/` folder with its subagent prompt checklist, loaded on demand the same way.
 
 
 ## Contents
@@ -26,6 +26,7 @@ None of the five skills here use `scripts/` or `references/`, no code, no build 
   - [drift-check](#drift-check) (Claude Code only)
   - [qa-audit](#qa-audit) (Claude Code only)
   - [token-audit](#token-audit) (Claude Code only)
+  - [model-alignment-audit](#model-alignment-audit) (Claude Code only)
 - [License](#license)
 
 
@@ -44,13 +45,13 @@ Cursor won't auto-discover a `SKILL.md`, but you can get the same workflow by tu
 
 Note: `drift-check` isn't built for Cursor yet, only the Claude Code version ships here, though the mechanism could work since Cursor's User Rules auto-load every session too.
 
-Note: `qa-audit` and `token-audit` both rely on spawning a separate subagent (an `Agent`-tool call) per file, that's a Claude Code mechanism a Cursor project rule can't reproduce. Converting either would collapse to a single self-audit pass with no parallelization, not the same workflow.
+Note: `qa-audit`, `token-audit`, and `model-alignment-audit` all rely on spawning a separate subagent (an `Agent`-tool call) per file, that's a Claude Code mechanism a Cursor project rule can't reproduce. Converting any of them would collapse to a single self-audit pass with no parallelization, not the same workflow. `model-alignment-audit` also depends on live WebFetch/WebSearch to pull current Anthropic guidance, which a Cursor rule can't do either.
 
 ## Using these in Chat or Cowork
 
 **Claude.ai Chat** can't do any of this: no persistent access to a project folder, only files you manually attach to one conversation.
 
-**Cowork** has folder access and subagents, so `project-init` and `handoff` could work there. `drift-check` can't: it needs a global `CLAUDE.md` to auto-load every session, and Cowork doesn't do that. `qa-audit` and `token-audit` aren't offered there either, they ship Claude Code only for now.
+**Cowork** has folder access and subagents, so `project-init` and `handoff` could work there. `drift-check` can't: it needs a global `CLAUDE.md` to auto-load every session, and Cowork doesn't do that. `qa-audit`, `token-audit`, and `model-alignment-audit` aren't offered there either, they ship Claude Code only for now.
 
 To install a skill: Customize > Skills > "+" > "+ Create skill" > "Upload a skill" (zip the folder first).
 
@@ -96,13 +97,13 @@ your-project/
         └── context-router.md
 ```
 
-Skip the git question with "no" and `.gitignore`/`LICENSE` are left out. `.cursor/rules/` is created either way, it's just a router file that's harmless if you don't use Cursor.
+Skip the git question with "no" to leave out `.gitignore`/`LICENSE`. `.cursor/rules/` gets created either way, it's just a router file, harmless if you don't use Cursor.
 
 ### [handoff](handoff/SKILL.md)
 
 > End-of-session wrap-up that logs progress and commits your work. Works in Cursor too.
 
-Logs one dated session entry (`Shipped` / `Next` / `Blockers`) in `docs/WORKLOG.md`, trims the Now/Next task checklist, checks the README is still accurate, and commits (pushes if a remote exists). Creates `docs/WORKLOG.md` if it doesn't exist yet. If there's meaningful carryover, it also writes a one-paragraph starter prompt you can paste into your next chat, skipped when there's nothing worth carrying over.
+Logs one dated session entry (`Shipped` / `Next` / `Blockers`) in `docs/WORKLOG.md`, trims the Now/Next task checklist, checks the README is still accurate, and commits (pushes if a remote exists). Creates `docs/WORKLOG.md` if it doesn't exist yet. If there's meaningful carryover, it also writes a one-paragraph starter prompt you can paste into your next chat; skips that step when there's nothing worth carrying over.
 
 - **Use it:** when wrapping up a work session on a project that already has `project-init`'s scaffolding. Also good when your session is getting long and you want to start a fresh one, running it first preserves state before context gets compacted or lost.
 - **Don't use it:** for new-project bootstrap, or general "what's the status" questions mid-session.
@@ -119,7 +120,7 @@ Scoped to the global file on purpose: it's usually the long, dense one that accu
 - **Use it:** only when you explicitly ask for it, e.g. "run a drift check." It should never trigger on its own.
 - **Don't use it:** as part of normal task work, it's a deliberate, occasional audit, not a background check.
 
-**One-time setup required before first use.** This skill can't run until your global context file is prepared:
+**One-time setup required before first use.** This skill can't run until you prepare your global context file:
 
 1. **Find or create your global context file.** Claude Code: `~/.claude/CLAUDE.md` (plain markdown, edit directly). Cursor: your User Rules (in Cursor Settings). Don't have one? This skill won't create it for you, use the example at [`drift-check/example-global-CLAUDE.md`](drift-check/example-global-CLAUDE.md) (note at the top marks what not to copy; everything below the divider is the template).
 2. **Generate three canary tokens.** Pick three short, random, unguessable strings, e.g. `sunfish-quartz-14`, `pebble-orchard-08`, `willow-basalt-71`. Use a different one for each position (top, middle, bottom) so a missing token tells you exactly where the drop happened.
@@ -150,6 +151,18 @@ Uses `model: "opus"` by default for the subagent calls. To use a different model
 
 - **Use it:** when you want to cut the token cost of a file or the whole skills library, e.g. "audit tokens on CLAUDE.md" or "is this skill too big."
 - **Don't use it:** to find bugs, contradictions, or dead logic (that's `qa-audit`), or on code files.
+
+
+### [model-alignment-audit](model-alignment-audit/SKILL.md)
+
+> Audits skills and context files against Anthropic's current Agent Skills guidance and how current models actually behave. Claude Code only.
+
+Fetches Anthropic's live Agent Skills best-practices doc, then spawns one Opus subagent per file (`SKILL.md`, `CLAUDE.md`, your global context file) to check two things: structural compliance (naming, frontmatter, progressive disclosure, size) and logic fit (whether freedom levels, numeric caps, and hand-holding still match current-model capability, or are leftover scaffolding tuned for older, less agentic models). Proposes fixes and waits for confirmation before editing anything.
+
+Uses `model: "opus"` by default for the subagent calls. To use a different model, edit the `model: "opus"` line in `model-alignment-audit/SKILL.md`.
+
+- **Use it:** periodically, or after a new Claude model ships, to check whether skills/context still fit current model behavior, e.g. "audit my skills against latest Anthropic guidance" or "model alignment audit."
+- **Don't use it:** for pure token-bloat concerns (that's `token-audit`), for contradictions/dead logic unrelated to model fit (that's `qa-audit`), or reflexively on every skill edit.
 
 
 ## License

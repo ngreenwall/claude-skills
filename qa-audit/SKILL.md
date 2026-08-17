@@ -23,9 +23,11 @@ See the frontmatter above for what this is NOT (drift-check, skill-creator's eva
 
 Identify the file(s) to QA.
 
-Before doing anything else, check whether the target looks like code: it's a code file if the extension isn't `.md`/`.mdc` (e.g. `.ts`, `.py`, `.js`). If so, stop immediately, don't spawn any agent, and tell the user in one line: "That's a code file, not instruction/config prose, use /code-review for that."
+Before doing anything else, check whether the target looks like code: it's a code file if the extension is a recognized code/data extension (e.g. `.ts`, `.tsx`, `.js`, `.jsx`, `.py`, `.rb`, `.go`, `.rs`, `.java`, `.c`, `.cpp`, `.sh`, `.sql`). If so, stop immediately, don't spawn any agent, and tell the user in one line: "That's a code file, not instruction/config prose, use /code-review for that."
 
-If the extension is `.md`/`.mdc` but the path isn't one of the recognized instruction/config locations (a `SKILL.md` inside a skills folder, `CLAUDE.md`, your global context file, `README.md`, `.claude/commands/*.md`), don't auto-reject it, ask the user to confirm it's instruction/config prose before proceeding.
+If the extension is `.md`/`.mdc` and the path is one of the recognized instruction/config locations (a `SKILL.md` inside a skills folder, `CLAUDE.md`, your global context file, `README.md`, `.claude/commands/*.md`), proceed directly.
+
+For anything else, an unrecognized `.md` location, `.json`, `.yaml`, `.toml`, `.env`, or similar config file, don't auto-reject it as code, ask the user to confirm it's instruction/config prose before proceeding.
 
 If the file is managed by a sync tool that generates copies elsewhere (e.g. a tool that regenerates `.claude/` or `.cursor/` files from a single source of truth), always resolve to that source file, never a generated copy, editing a generated copy gets silently overwritten on the next sync run. Skip this check if you don't use such a tool, most projects edit `SKILL.md`/`CLAUDE.md` directly.
 

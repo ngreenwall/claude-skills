@@ -94,7 +94,7 @@ For each proposed change, show it in this format before writing, including any a
 
 If nothing qualifies, say "No spec or decision updates needed" and move on.
 
-Wait for confirmation before writing. If the user approves, apply all at once, archiving before adding the new entry so the live log never exceeds 15 non-superseded entries. Use today's date on new decision entries.
+Wait for confirmation before writing. If the user approves, apply all at once, archiving before adding the new entry so the live log never exceeds 8 non-superseded entries. Use today's date on new decision entries.
 
 If CLAUDE.md's spec/decision sections have grown large, see the escalation rule in `references/decision-log-maintenance.md`.
 

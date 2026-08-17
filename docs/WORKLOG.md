@@ -9,6 +9,8 @@
 
 ## Session notes
 <!-- Newest entry at top. Format: YYYY-MM-DD | Shipped: ... | Next: ... | Blockers: ... -->
+2026-08-17 | Shipped: Audited this repo against a same-session pass over the private my-ai-agent skills library; fixed 2 bugs: qa-audit/token-audit's inverted code-file guard now checks explicit code extensions first instead of rejecting non-.md files as code; handoff's decision-log cap corrected from 15 to 8, matching references/decision-log-maintenance.md; ported model-alignment-audit as sixth public skill; updated README and CLAUDE.md decision log; stop-slop pass on README fixed 3 passive-voice spots. | Next: none pending from this session. | Blockers: none
+
 2026-07-22 | Shipped: Ported private my-ai-agent token-audit edits into token-audit/SKILL.md: Step 1 gained a skip check (Mode A only) that skips the audit agent for already-lean files under ~100 lines; Step 4 gained a report format cap (one line per finding, Mode B shows top 15 in full, rest summarized by count/tier). Also added a README line clarifying context-router.md is what makes CLAUDE.md work for Cursor, commit af511de. | Next: none pending from this session. | Blockers: none
 
 2026-07-22 | Shipped: Ported private my-ai-agent edits into handoff/SKILL.md, worklog-template.md, decision-log-maintenance.md: archive thresholds 10→6/15→8; length checks now hard-enforced; README relevance + CLAUDE.md bloat checks re-added; /compact-at-low-effort line added. token-audit/SKILL.md: 2 new triggers; new Mode C (WebFetch Anthropic docs, propose checklist updates); bare-invocation menu step. README.md: project-init structure diagrams (simple/in-depth); Works-in-Cursor-too tags on project-init/handoff. | Next: none pending from this session. | Blockers: none

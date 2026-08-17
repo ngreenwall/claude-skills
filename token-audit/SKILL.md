@@ -69,9 +69,11 @@ Identify the file(s) and mode (see Modes above).
 - If `SKILL.md` files, `CLAUDE.md`, or a global context file exist here: present a 3-option menu (single file / full library / refresh guidance) instead of free-text back-and-forth.
 - If none of those exist: there's nothing for Mode A or B to point at. Skip the menu, tell the user in one line ("No instruction/config files found here, offering a guidance refresh instead"), and go straight to Mode C.
 
-Before anything else, check whether the target looks like code: it's a code file if the extension isn't `.md`/`.mdc`. If so, stop immediately, don't spawn any agent, and tell the user in one line: "That's a code file, not instruction/config prose, use /code-review for that."
+Before anything else, check whether the target looks like code: it's a code file if the extension is a recognized code/data extension (e.g. `.ts`, `.tsx`, `.js`, `.jsx`, `.py`, `.rb`, `.go`, `.rs`, `.java`, `.c`, `.cpp`, `.sh`, `.sql`). If so, stop immediately, don't spawn any agent, and tell the user in one line: "That's a code file, not instruction/config prose, use /code-review for that."
 
-If the extension is `.md`/`.mdc` but the path isn't one of the recognized instruction/config locations (a `SKILL.md` inside a skills folder, `CLAUDE.md`, your global context file, `README.md`, `.claude/commands/*.md`), ask the user to confirm it's instruction/config prose before proceeding.
+If the extension is `.md`/`.mdc` and the path is one of the recognized instruction/config locations (a `SKILL.md` inside a skills folder, `CLAUDE.md`, your global context file, `README.md`, `.claude/commands/*.md`), proceed directly.
+
+For anything else, an unrecognized `.md` location, `.json`, `.yaml`, `.toml`, `.env`, or similar config file, ask the user to confirm it's instruction/config prose before proceeding.
 
 If the file is managed by a sync tool that generates copies elsewhere (e.g. a tool that regenerates `.claude/` or `.cursor/` files from a single source of truth), always resolve to that source file, never a generated copy. Skip this check if you don't use such a tool, most projects edit `SKILL.md`/`CLAUDE.md` directly.
 
